@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+
+import '../components/custom_button.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _State();
+}
+
+class _State extends State<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Benvenuto!', style: TextStyle(fontFamily: 'Gabarito')),
+
+        centerTitle: false,
+      ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        children: [
+          CustomButton(text: 'Crea il tuo cocktail', onPressed: () {}),
+        ],
+
+
+      ),
+    );
+  }
+}
