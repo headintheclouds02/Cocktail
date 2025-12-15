@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../components/custom_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,12 +13,11 @@ class _State extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Benvenuto!', style: TextStyle(fontFamily: 'Gabarito')),
-
+        title: Text('Benvenuto!', style: TextStyle(fontFamily: 'Gabarito', fontSize: 32)),
         centerTitle: false,
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         children: [
           CustomButton(text: 'Crea il tuo cocktail', onPressed: () {}),
         ],
