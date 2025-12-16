@@ -17,17 +17,56 @@ class _State extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Benvenuto!', style: TextStyle(fontFamily: 'Gabarito', fontSize: 32)),
+          title: Text(
+            'Benvenuto!',
+            style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
+          ),
           centerTitle: false,
         ),
-        body: ListView(
-          children: [
-            CustomSearchBar(hintText: ('Cosa vuoi bere?'), onChanged: (value) {}, icon: SvgPicture.asset('assets/img/icone/search.svg', width: 20, height: 20, color: AppColors.iconFocused)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: CustomButton(text: 'Crea il tuo cocktail', onPressed: () {}),
-            ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ListView(
+            children: [
+              //SEARCH BAR CUSTOM
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: CustomSearchBar(
+                  hintText: ('Cosa vuoi bere?'),
+                  onChanged: (value) {},
+                  icon: SvgPicture.asset(
+                    'assets/img/icone/search.svg',
+                    width: 20,
+                    height: 20,
+                    color: AppColors.iconFocused,
+                  ),
+                ),
+              ),
+
+              //TEXT "CATEGORIES"
+              Text(
+                "Categorie",
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
+              ),
+
+              //BUTTON CUSTOM
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 32,
+                ),
+                child: CustomButton(
+                  text: 'Crea il tuo cocktail',
+                  onPressed: () {},
+                ),
+              ),
+
+              //TEXT "POPULAR"
+              Text(
+                "Popolari",
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
+              ),
             ],
+          ),
         ),
       ),
     );
