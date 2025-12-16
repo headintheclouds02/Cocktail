@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/components/custom_tapbar.dart';
 import '../components/custom_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,9 +22,8 @@ class _State extends State<HomeScreen> {
         children: [
           CustomButton(text: 'Crea il tuo cocktail', onPressed: () {}),
         ],
-
-
       ),
+      bottomNavigationBar: CustomTapbar(),
     );
   }
 }
