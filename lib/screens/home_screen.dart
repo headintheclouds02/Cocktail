@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _State extends State<HomeScreen> {
+  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,13 +18,14 @@ class _State extends State<HomeScreen> {
         title: Text('Benvenuto!', style: TextStyle(fontFamily: 'Gabarito', fontSize: 32)),
         centerTitle: false,
       ),
-      body: ListView(
+      body:
+
+      ListView(
         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
         children: [
           CustomButton(text: 'Crea il tuo cocktail', onPressed: () {}),
         ],
       ),
-      bottomNavigationBar: CustomTapbar(),
     );
   }
 }
