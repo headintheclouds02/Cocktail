@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
+import 'package:flutter_cocktail/components/cocktail_card.dart';
+import 'package:flutter_cocktail/screens/add_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
@@ -50,6 +52,7 @@ class _State extends State<HomeScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
               ),
 
+              //CAROSELLO CARD COCKTAIL
               SizedBox(
                 height: 160,
                 child: ListView(
@@ -93,7 +96,9 @@ class _State extends State<HomeScreen> {
                 ),
                 child: CustomButton(
                   text: 'Crea il tuo cocktail',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddScreen()));
+                  },
                 ),
               ),
 
@@ -101,6 +106,42 @@ class _State extends State<HomeScreen> {
               Text(
                 "Popolari",
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
+              ),
+
+              //COCKTAIL CARD
+              SizedBox(
+                height: 250,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    CocktailCard(
+                      image: Image.asset('assets/img/cocktail/bloody.png'),
+                      color: AppColors.bloody,
+                      text: 'Bloody Mary',
+                    ),
+
+                    CocktailCard(
+                      image: Image.asset('assets/img/cocktail/margarita.png'),
+                      color: AppColors.margarita,
+                      text: 'Margarita',
+                    ),
+                    CocktailCard(
+                      image: Image.asset('assets/img/cocktail/mojito.png'),
+                      color: AppColors.mojito,
+                      text: 'Mojito',
+                    ),
+                    CocktailCard(
+                      image: Image.asset('assets/img/cocktail/negroni.png'),
+                      color: AppColors.negroni,
+                      text: 'Negroni',
+                    ),
+                    CocktailCard(
+                      image: Image.asset('assets/img/cocktail/spritz.png'),
+                      color: AppColors.aperol,
+                      text: 'Spritz',
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

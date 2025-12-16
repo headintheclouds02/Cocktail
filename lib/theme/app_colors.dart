@@ -21,4 +21,9 @@ class AppColors {
   static const tequila = Color(0xFFDBFDFF);
   static const vodka = Color(0xFFC6DBFF);
 
+  static const bloody = Color(0xFFDB8573);
+  static const margarita = Color(0xFFC9CCA4);
+  static const mojito = Color(0xFFA7A388);
+  static const negroni = Color(0xFFE8BC97);
+
 }
