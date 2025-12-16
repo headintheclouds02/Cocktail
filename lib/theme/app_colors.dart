@@ -14,4 +14,11 @@ class AppColors {
   static const textPrimary = Color(0xFF373737);
   static const buttonText = Color(0xFFFFFFFF);
 
+  static const aperol = Color(0xFFFFCACC);
+  static const campari = Color(0xFFE8B9BB);
+  static const prosecco = Color(0xFFE7CCA0);
+  static const soda = Color(0xFFE8E8E8);
+  static const tequila = Color(0xFFDBFDFF);
+  static const vodka = Color(0xFFC6DBFF);
+
 }
