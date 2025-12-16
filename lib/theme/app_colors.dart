@@ -12,5 +12,6 @@ class AppColors {
   static const searchBar = Color(0x7FDDC4CA);
   static const tapBarBackground = Color(0xFFF87594);
   static const textPrimary = Color(0xFF373737);
+  static const buttonText = Color(0xFFFFFFFF);
 
 }
