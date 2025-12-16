@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
-import 'package:flutter_cocktail/components/cocktail_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
