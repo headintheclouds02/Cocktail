@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart' hide SearchBar;
+import 'package:flutter_cocktail/components/category_card.dart';
+import 'package:flutter_cocktail/components/cocktail_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _State extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,11 +51,46 @@ class _State extends State<HomeScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
               ),
 
+              SizedBox(
+                height: 160,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                    children: [
+                    CategoryCard(
+                      image: Image.asset('assets/img/cocktail/spritz.png'),
+                      color: AppColors.aperol,
+                      text: 'Aperitivo',
+                    ),
+
+                    CategoryCard(
+                      image: Image.asset('assets/img/spiriti/vodka.png'),
+                      color: AppColors.vodka,
+                      text: 'Vodka',
+                    ),
+                    CategoryCard(
+                      image: Image.asset('assets/img/vini/prosecco.png'),
+                      color: AppColors.prosecco,
+                      text: 'Prosecco',
+                    ),
+                    CategoryCard(
+                      image: Image.asset('assets/img/spiriti/tequila.png'),
+                      color: AppColors.tequila,
+                      text: 'Tequila',
+                    ),
+                    CategoryCard(
+                      image: Image.asset('assets/img/spiriti/rumbianco.png'),
+                      color: AppColors.aperol,
+                      text: 'Rum',
+                    ),
+                  ],
+                ),
+              ),
+
               //BUTTON CUSTOM
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
-                  vertical: 32,
+                  vertical: 16,
                 ),
                 child: CustomButton(
                   text: 'Crea il tuo cocktail',
