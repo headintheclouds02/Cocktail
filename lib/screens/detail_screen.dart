@@ -64,6 +64,10 @@ class DetailScreen extends StatelessWidget {
                     style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.shopping_cart),
+                  ),
                 ],
               ),
             Align(
