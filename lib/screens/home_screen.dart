@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
 import 'package:flutter_cocktail/components/cocktail_card.dart';
@@ -26,17 +28,22 @@ class _State extends State<HomeScreen> {
   }
 
   void fetchCocktails() async {
+    final dio = Dio();
+
     try {
-      var response = await Dio().get(
-        'http://localhost:8081/api/public/cocktails',
+      var response = await dio.get(
+        'http://10.0.2.2:8081/api/public/cocktails',
       );
+     print(response.statusCode);
       List<dynamic> data = response.data['content'];
+
+      print(response);
 
       setState(() {
         cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
       });
     } catch (e) {
-      print(e);
+      print("-----> $e");
     }
   }
 
@@ -86,7 +93,7 @@ class _State extends State<HomeScreen> {
                     return CategoryCard(
                       image: Image.asset('assets/img/spiriti/tequila.png'),
                       color: AppColors.tequila,
-                      text: cocktails[index].name,
+                      text: cocktails[index].category,
                     );
                   },
                 ),
@@ -116,7 +123,7 @@ class _State extends State<HomeScreen> {
               ),
 
               //COCKTAIL CARD
-              SizedBox(
+              /*SizedBox(
                 height: 250,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -148,6 +155,21 @@ class _State extends State<HomeScreen> {
                       text: 'Spritz',
                     ),
                   ],
+                ),
+              ),*/
+
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: cocktails.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CocktailCard(
+                      image: Image.asset('assets/img/spiriti/tequila.png'),
+                      color: AppColors.tequila,
+                      text: cocktails[index].name,
+                    );
+                  },
                 ),
               ),
             ],
