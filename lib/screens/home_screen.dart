@@ -122,42 +122,6 @@ class _State extends State<HomeScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
               ),
 
-              //COCKTAIL CARD
-              /*SizedBox(
-                height: 250,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    CocktailCard(
-                      image: Image.asset('assets/img/cocktail/bloody.png'),
-                      color: AppColors.bloody,
-                      text: 'Bloody Mary',
-                    ),
-
-                    CocktailCard(
-                      image: Image.asset('assets/img/cocktail/margarita.png'),
-                      color: AppColors.margarita,
-                      text: 'Margarita',
-                    ),
-                    CocktailCard(
-                      image: Image.asset('assets/img/cocktail/mojito.png'),
-                      color: AppColors.mojito,
-                      text: 'Mojito',
-                    ),
-                    CocktailCard(
-                      image: Image.asset('assets/img/cocktail/negroni.png'),
-                      color: AppColors.negroni,
-                      text: 'Negroni',
-                    ),
-                    CocktailCard(
-                      image: Image.asset('assets/img/cocktail/spritz.png'),
-                      color: AppColors.aperol,
-                      text: 'Spritz',
-                    ),
-                  ],
-                ),
-              ),*/
-
               SizedBox(
                 height: 250,
                 child: ListView.builder(
@@ -168,6 +132,8 @@ class _State extends State<HomeScreen> {
                       image: Image.asset('assets/img/spiriti/tequila.png'),
                       color: AppColors.tequila,
                       text: cocktails[index].name,
+                      description: cocktails[index].description,
+                      ingredients: cocktails[index].cocktailIngredients,
                     );
                   },
                 ),
