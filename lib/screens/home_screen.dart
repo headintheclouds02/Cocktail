@@ -12,7 +12,9 @@ import '../theme/app_colors.dart';
 import 'package:dio/dio.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Function(int) onChangePage;
+
+  const HomeScreen({super.key, required this.onChangePage});
 
   @override
   State<HomeScreen> createState() => _State();
@@ -100,12 +102,7 @@ class _State extends State<HomeScreen> {
                 ),
                 child: CustomButton(
                   text: 'Crea il tuo cocktail',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddScreen()),
-                    );
-                  },
+                  onPressed: () => widget.onChangePage(2),
                 ),
               ),
 

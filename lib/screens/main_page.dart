@@ -34,12 +34,22 @@ class _MainPageState extends State<MainPage> {
   }
 
   //lista di widget per le pagine
-  final List<Widget> _pages = const [
-    HomeScreen(),
-    ExploreScreen(),
-    AddScreen(),
-    CartScreen(),
-    ProfileScreen(),
+  late final List<Widget> _pages = [
+    //ho dovuto aggiungere questi parametri a homescreen per far si chè da homescreen, con la pressione di un
+    // custombutton, si possa navigare a una delle schermatre della pageview
+    HomeScreen(
+      onChangePage: (index) {
+        _pageController.animateToPage(
+          index,
+          duration: Duration(milliseconds: 600),
+          curve: Curves.easeInOut,
+        );
+      },
+    ),
+    const ExploreScreen(),
+    const AddScreen(),
+    const CartScreen(),
+    const ProfileScreen(),
   ];
 
   //lista di titoli da abbiare alla pagina per l'appbar
@@ -76,14 +86,13 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: CustomTapbar(
         currentIndex: _currentIndex,
         onTap: (index) {
-
           //.jumpToPage naviga tra schermate senza animazioni
           //_pageController.jumpToPage(index);
 
           //.animateToPage() naviga tra schermate con animazioni
           _pageController.animateToPage(
             index,
-            duration: Duration(milliseconds: 800),
+            duration: Duration(milliseconds: 600),
             curve: Curves.easeInOut,
           );
         },
