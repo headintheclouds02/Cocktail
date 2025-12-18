@@ -52,20 +52,32 @@ class DetailScreen extends StatelessWidget {
             for (var ingredient in ingredients)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+
                 children: [
-                  Text(
-                    "${ingredient.quantity}  ",
-                    style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    ingredient.ingredient.name,
-                    style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
-                    textAlign: TextAlign.center,
+                  Row(
+                    children: [
+                      Text(
+                        "${ingredient.quantity}  ",
+                        style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        ingredient.ingredient.name,
+                        style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Aggiunto al carrello'),
+                        duration: Duration(seconds: 2),
+                      )
+                      );
+                    },
                     icon: Icon(Icons.shopping_cart),
                   ),
                 ],
