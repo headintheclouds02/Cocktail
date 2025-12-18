@@ -50,7 +50,7 @@ class _State extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
         children: [
           //SEARCH BAR CUSTOM

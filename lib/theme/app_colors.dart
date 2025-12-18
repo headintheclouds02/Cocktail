@@ -13,6 +13,7 @@ class AppColors {
   static const tapBarBackground = Color(0xFFF87594);
   static const textPrimary = Color(0xFF373737);
   static const buttonText = Color(0xFFFFFFFF);
+  static const addCard = Color(0xFFD1C4C3);
 
   static const aperol = Color(0xFFFFCACC);
   static const campari = Color(0xFFE8B9BB);
