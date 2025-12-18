@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 
 
 class SvuotaFrigoScreen extends StatelessWidget {
-  const SvuotaFrigoScreen({super.key});
+  final String title;
+  const SvuotaFrigoScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(title, style: TextStyle(fontFamily: 'Gabarito', fontSize: 32)),
+        )
+
+    );
   }
 }

@@ -25,7 +25,7 @@ class AddCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 30),
         color: AppColors.addCard,
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
           child: Column(
             children: [
               Text(

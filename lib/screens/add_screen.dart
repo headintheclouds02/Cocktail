@@ -26,7 +26,7 @@ class _AddScreenState extends State<AddScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SvuotaFrigoScreen()),
+                MaterialPageRoute(builder: (context) => SvuotaFrigoScreen(title: "Svuota frigo")),
               );
             },
           ),
@@ -36,7 +36,7 @@ class _AddScreenState extends State<AddScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LiberaFantasiaScreen()),
+                MaterialPageRoute(builder: (context) => LiberaFantasiaScreen(title: "Libera la fantasia")),
               );
             },
           ),
