@@ -30,7 +30,7 @@ class AddCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
                 textAlign: TextAlign.center,
               ),
               Text(
