@@ -7,7 +7,7 @@ import 'package:flutter_cocktail/screens/profile_screen.dart';
 import '../components/custom_tapbar.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -15,28 +15,77 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
+  late final PageController _pageController;
 
-  Widget _getPage(int index) {
-    switch (index) {
-      case 0: return HomeScreen();
-      case 1: return ExploreScreen();
-      case 2: return AddScreen();
-      case 3: return CartScreen();
-      case 4: return ProfileScreen();
-      default: return HomeScreen();
-    }
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
   }
+
+  @override
+  //GESTISCE IL CICLO DI VITA DEI DATI
+  //non viene chiamato da te manualmente
+  //
+  // viene chiamato automaticamente dal framework Flutter quando il widget viene rimosso definitivamente dall’albero dei widget
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  //lista di widget per le pagine
+  final List<Widget> _pages = const [
+    HomeScreen(),
+    ExploreScreen(),
+    AddScreen(),
+    CartScreen(),
+    ProfileScreen(),
+  ];
+
+  //lista di titoli da abbiare alla pagina per l'appbar
+  final List<String> _titles = [
+    "Benvenuto!",
+    "Esplora",
+    "Sperimenta",
+    "Lista della spesa",
+    "Profilo",
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getPage(_currentIndex),
-      bottomNavigationBar: CustomTapbar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
+      appBar: AppBar(
+        title: Text(
+          _titles[_currentIndex],
+          style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
+        ),
+        centerTitle: false,
+      ),
+      body: PageView(
+        controller: _pageController,
+
+        // serve a disabilitare lo swipe manuale tra le schermate
+        //physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: (index) {
           setState(() {
             _currentIndex = index;
           });
+        },
+        children: _pages,
+      ),
+      bottomNavigationBar: CustomTapbar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+
+          //.jumpToPage naviga tra schermate senza animazioni
+          //_pageController.jumpToPage(index);
+
+          //.animateToPage() naviga tra schermate con animazioni
+          _pageController.animateToPage(
+            index,
+            duration: Duration(milliseconds: 800),
+            curve: Curves.easeInOut,
+          );
         },
       ),
     );

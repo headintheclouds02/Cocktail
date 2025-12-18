@@ -45,13 +45,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Esplora',
-            style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
-          ),
-          centerTitle: false,
-        ),
         body: InkWell(
           onTap: () {
             // Azione al tap
