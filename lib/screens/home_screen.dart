@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
+import 'package:flutter_cocktail/components/cocktail_card.dart';
+import 'package:flutter_cocktail/screens/add_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
+import '../model/cocktail.dart';
 import '../theme/app_colors.dart';
+import 'package:dio/dio.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +19,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _State extends State<HomeScreen> {
+  List<Cocktail> cocktails = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCocktails();
+  }
+
+  void fetchCocktails() async {
+    final dio = Dio();
+
+    try {
+      var response = await dio.get(
+        'http://10.0.2.2:8081/api/public/cocktails',
+      );
+     print(response.statusCode);
+      List<dynamic> data = response.data['content'];
+
+      print(response);
+
+      setState(() {
+        cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
+      });
+    } catch (e) {
+      print("-----> $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,38 +83,19 @@ class _State extends State<HomeScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
               ),
 
+              //CAROSELLO CARD COCKTAIL
               SizedBox(
                 height: 160,
-                child: ListView(
+                child: ListView.builder(
+                  itemCount: cocktails.length,
                   scrollDirection: Axis.horizontal,
-                    children: [
-                    CategoryCard(
-                      image: Image.asset('assets/img/cocktail/spritz.png'),
-                      color: AppColors.aperol,
-                      text: 'Aperitivo',
-                    ),
-
-                    CategoryCard(
-                      image: Image.asset('assets/img/spiriti/vodka.png'),
-                      color: AppColors.vodka,
-                      text: 'Vodka',
-                    ),
-                    CategoryCard(
-                      image: Image.asset('assets/img/vini/prosecco.png'),
-                      color: AppColors.prosecco,
-                      text: 'Prosecco',
-                    ),
-                    CategoryCard(
+                  itemBuilder: (context, index) {
+                    return CategoryCard(
                       image: Image.asset('assets/img/spiriti/tequila.png'),
                       color: AppColors.tequila,
-                      text: 'Tequila',
-                    ),
-                    CategoryCard(
-                      image: Image.asset('assets/img/spiriti/rumbianco.png'),
-                      color: AppColors.aperol,
-                      text: 'Rum',
-                    ),
-                  ],
+                      text: cocktails[index].category,
+                    );
+                  },
                 ),
               ),
 
@@ -93,7 +107,12 @@ class _State extends State<HomeScreen> {
                 ),
                 child: CustomButton(
                   text: 'Crea il tuo cocktail',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddScreen()),
+                    );
+                  },
                 ),
               ),
 
@@ -101,6 +120,23 @@ class _State extends State<HomeScreen> {
               Text(
                 "Popolari",
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
+              ),
+
+              SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  itemCount: cocktails.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CocktailCard(
+                      image: Image.asset('assets/img/spiriti/tequila.png'),
+                      color: AppColors.tequila,
+                      text: cocktails[index].name,
+                      description: cocktails[index].description,
+                      ingredients: cocktails[index].cocktailIngredients,
+                    );
+                  },
+                ),
               ),
             ],
           ),
