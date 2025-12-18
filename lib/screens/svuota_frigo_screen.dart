@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../components/category_card.dart';
-import '../model/cocktail.dart';
+import '../model/ingredient.dart';
 import '../theme/app_colors.dart';
 
 class SvuotaFrigoScreen extends StatefulWidget {
   final String title;
+
   const SvuotaFrigoScreen({super.key, required this.title});
 
   @override
@@ -13,7 +14,11 @@ class SvuotaFrigoScreen extends StatefulWidget {
 }
 
 class _State extends State<SvuotaFrigoScreen> {
-  List<Cocktail> cocktails = [];
+  Map<String, List<Ingredient>> ingredientsByCategory = {};
+  List<String> categories = [];
+
+  String? selectedCategory;
+  List<Ingredient> visibleIngredients = [];
 
   @override
   void initState() {
@@ -21,22 +26,44 @@ class _State extends State<SvuotaFrigoScreen> {
     fetchIngredients();
   }
 
+  void selectCategory(String category) {
+    setState(() {
+      selectedCategory = category;
+      visibleIngredients = ingredientsByCategory[category] ?? [];
+    });
+  }
+
   void fetchIngredients() async {
     final dio = Dio();
 
     try {
-      var response = await dio.get('http://10.0.2.2:8081/api/public/cocktails');
-      //print(response.statusCode);
-      List<dynamic> data = response.data['content'];
+      final response = await dio.get(
+        'http://10.0.2.2:8081/api/ingredients/grouped-by-category',
+      );
 
-      print(response);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = response.data;
 
-      setState(() {
-        cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
-        print(cocktails);
-      });
+        final Map<String, List<Ingredient>> parsedData = {};
+
+        data.forEach((category, ingredientsList) {
+          parsedData[category] = (ingredientsList as List)
+              .map((json) => Ingredient.fromJson(json))
+              .toList();
+        });
+
+        setState(() {
+          ingredientsByCategory = parsedData;
+          categories = parsedData.keys.toList();
+
+          selectedCategory = categories.isNotEmpty ? categories.first : null;
+          visibleIngredients = selectedCategory != null
+              ? ingredientsByCategory[selectedCategory]!
+              : [];
+        });
+      }
     } catch (e) {
-      print("-----> $e");
+      debugPrint("Errore fetchIngredients ---> $e");
     }
   }
 
@@ -53,11 +80,49 @@ class _State extends State<SvuotaFrigoScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [
-            Text("Quale ingrediente domina il tuo frigo?", style: TextStyle(fontFamily: 'Gabarito', fontSize: 18)),
+            Text(
+              "Quale ingrediente domina il tuo frigo?",
+              style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+            ),
+            const SizedBox(height: 16),
+            // Qui creo un carosello per ogni categoria
+            ...categories.map((category) {
+              final ingredients = ingredientsByCategory[category] ?? [];
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    category,
+                    style: TextStyle(
+                      fontFamily: 'Gabarito',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 160,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: ingredients.length,
+                      itemBuilder: (context, index) {
+                        final ingredient = ingredients[index];
+                        return CategoryCard(
+                          image: Image.asset('assets/img/spiriti/tequila.png'),
+                          color: AppColors.tequila,
+                          text: ingredient.name,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              );
+            }).toList(),
           ],
         ),
       ),
-
     );
   }
+
 }
