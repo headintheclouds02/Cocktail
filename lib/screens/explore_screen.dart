@@ -45,27 +45,22 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: InkWell(
-          onTap: () {
-            // Azione al tap
-          },
-          child: GridView.count(
-            crossAxisCount:2 ,
-            childAspectRatio: 3/4,
-            // Numero di colonne
-            padding: EdgeInsets.all(10),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            children: List.generate(cocktails.length, (index) {
-              return CocktailCard(
-                image: Image.asset('assets/img/cocktail/margarita.png'),
-                color: AppColors.margarita,
-                text: cocktails[index].name,
-                description: cocktails[index].description,
-                ingredients: cocktails[index].cocktailIngredients,
-              );
-            }),
-          ),
+        body: GridView.count(
+          crossAxisCount:2 ,
+          childAspectRatio: 3/4,
+          // Numero di colonne
+          padding: EdgeInsets.all(10),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          children: List.generate(cocktails.length, (index) {
+            return CocktailCard(
+              image: Image.asset('assets/img/cocktail/margarita.png'),
+              color: AppColors.margarita,
+              text: cocktails[index].name,
+              description: cocktails[index].description,
+              ingredients: cocktails[index].cocktailIngredients,
+            );
+          }),
         ),
       ),
     );

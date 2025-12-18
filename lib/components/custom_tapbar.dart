@@ -23,7 +23,7 @@ class _CustomTapbarState extends State<CustomTapbar> {
     return SafeArea(
       child: Container(
         height: 80,
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: AppColors.tapBarBackground,
           borderRadius: BorderRadius.circular(25),

@@ -72,10 +72,12 @@ class DetailScreen extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Aggiunto al carrello'),
-                        duration: Duration(seconds: 2),
-                      )
+                      //funzione che permette di mostrare la snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Aggiunto al carrello'),
+                          duration: Duration(seconds: 2),
+                        ),
                       );
                     },
                     icon: Icon(Icons.shopping_cart),
