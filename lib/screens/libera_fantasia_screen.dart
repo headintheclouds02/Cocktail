@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../components/search_bar.dart';
@@ -38,6 +39,19 @@ class LiberaFantasiaScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text("Scegli i tuoi ingredienti", style: TextStyle(fontFamily: 'Gabarito', fontSize: 18)),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: TextFieldCustom(
+                hintText: ('Scegli il tuo nome'),
+                onChanged: (value) {},
+                icon: SvgPicture.asset(
+                  'assets/img/icone/search.svg',
+                  width: 20,
+                  height: 20,
+                  color: AppColors.iconFocused,
+                ),
+              ),
             ),
           ],
 
