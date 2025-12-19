@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/components/custom_app_bar.dart';
 import 'package:flutter_cocktail/screens/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/custom_button.dart';
@@ -21,31 +22,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.registrationBg,
-
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: SizedBox(
-                width: 45,
-                height: 45,
-                child: Image.asset("assets/img/generic/logo_pnk_nobg.png"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                "Bevo, quindi sono",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.registrationBg,
+      appBar: CustomAppBar(
+        enableBackPress: true,
       ),
-
       body: Stack(
         children: [
           // Background
@@ -53,7 +32,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             bottom: 0,
             right: -55,
             child: Image.asset(
-              "assets/img/generic/login.png",
+              "assets/img/generic/registrazione.png",
               height: 500,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/components/custom_app_bar.dart';
 import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:flutter_cocktail/screens/registration_screen.dart';
 
@@ -11,37 +12,12 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             children: [
-              //titolo app in alto
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: SizedBox(
-                        width: 45,
-                        height: 45,
-                        child: Image.asset("assets/img/generic/logo_pnk_nobg.png"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
-                        "Bevo, quindi sono",
-                        style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
               //card con coktail
               Stack(
                 alignment: Alignment.centerLeft,
@@ -89,15 +65,16 @@ class MenuScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => RegistrationScreen(),
+                    ),
                   );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     "o crea un account",
-                    style:
-                    TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Gabarito',
                       fontSize: 20,
                       color: AppColors.buttonEnabled,
