@@ -64,6 +64,12 @@ flutter:
     - assets/img/succhi/succolime.png
     - assets/img/succhi/succopomodoro.png
     - assets/img/vini/prosecco.png
+    - assets/img/generic/logo_pnk_nobg.png
+    - assets/img/generic/logo_wht_nobg.png
+    - assets/img/generic/menu.png
+    - assets/img/generic/login.png
+
+
 
 
 
