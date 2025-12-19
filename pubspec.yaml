@@ -68,6 +68,15 @@ flutter:
     - assets/img/generic/logo_wht_nobg.png
     - assets/img/generic/menu.png
     - assets/img/generic/login.png
+    - assets/img/generic/mail.svg
+    - assets/img/generic/password.svg
+    - assets/img/generic/user.svg
+    - assets/img/generic/show.svg
+    - assets/img/generic/hide.svg
+
+
+
+
 
 
 
