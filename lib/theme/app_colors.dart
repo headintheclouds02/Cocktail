@@ -14,6 +14,7 @@ class AppColors {
   static const textPrimary = Color(0xFF373737);
   static const buttonText = Color(0xFFFFFFFF);
   static const addCard = Color(0xFFD1C4C3);
+  static const registrationBg = Color(0xFFC9AEB5);
 
   static const aperol = Color(0xFFFFCACC);
   static const campari = Color(0xFFE8B9BB);
