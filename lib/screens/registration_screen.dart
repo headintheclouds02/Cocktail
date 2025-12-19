@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/screens/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/custom_button.dart';
 import '../components/input_field_custom.dart';
@@ -14,6 +15,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool isPasswordHidden = true;
+  bool isPasswordHidden1 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    _label("Nome"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Nome",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci nome',
                       icon: SvgPicture.asset("assets/img/generic/user.svg"),
@@ -92,7 +103,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (_) {},
                     ),
 
-                    _label("Cognome"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Cognome",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci cognome',
                       icon: SvgPicture.asset("assets/img/generic/user.svg"),
@@ -100,7 +120,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (_) {},
                     ),
 
-                    _label("Username"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Username",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci username',
                       icon: SvgPicture.asset("assets/img/generic/user.svg"),
@@ -108,7 +137,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (_) {},
                     ),
 
-                    _label("Email"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Email",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci email',
                       icon: SvgPicture.asset("assets/img/generic/mail.svg"),
@@ -116,7 +154,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (_) {},
                     ),
 
-                    _label("Password"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Password",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci password',
                       hideText: isPasswordHidden,
@@ -133,10 +180,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               : "assets/img/generic/show.svg",
                         ),
                       ),
-                      onChanged: (_) {},
+                      onChanged: (String value) {},
                     ),
 
-                    _label("Ripeti Password"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        "Ripeti password",
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                     InputFieldCustom(
                       hintText: 'Inserisci password',
                       hideText: isPasswordHidden,
@@ -144,22 +200,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {
-                            isPasswordHidden = !isPasswordHidden;
+                            isPasswordHidden1 = !isPasswordHidden1;
                           });
                         },
                         icon: SvgPicture.asset(
-                          isPasswordHidden
+                          isPasswordHidden1
                               ? "assets/img/generic/hide.svg"
                               : "assets/img/generic/show.svg",
                         ),
                       ),
-                      onChanged: (_) {},
+                      onChanged: (String value) {},
                     ),
 
                     const SizedBox(height: 32),
 
                     CustomButton(
-                      text: "Mixiamo!",
+                      text: "Iniziamo!",
                       onPressed: () {
                         Navigator.pushAndRemoveUntil(
                           context,
@@ -172,15 +228,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     const SizedBox(height: 16),
 
                     Text(
-                      'Prima volta al bancone?',
+                      'Fai già parte del nostro club?',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
                     ),
 
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => LoginScreen(),
+                          ),
+                        );
+                      },
                       child: Text(
-                        "Unisciti a noi",
+                        "Accedi al lounge",
                         style: TextStyle(
                           fontFamily: 'Gabarito',
                           fontSize: 18,
@@ -200,15 +263,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 }
-
-Widget _label(String text) => Padding(
-  padding: const EdgeInsets.symmetric(vertical: 8),
-  child: Text(
-    text,
-    style: TextStyle(
-      fontFamily: 'Gabarito',
-      fontSize: 20,
-    ),
-  ),
-);
 
