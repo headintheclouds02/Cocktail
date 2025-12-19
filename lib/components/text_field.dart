@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/app_colors.dart';
 
-class CustomSearchBar extends StatelessWidget {
+class TextFieldCustom extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final String hintText;
   final TextEditingController? controller;
   final SvgPicture icon;
 
-  const CustomSearchBar({
+  const TextFieldCustom({
     super.key,
     required this.onChanged,
     required this.hintText,
@@ -27,10 +27,12 @@ class CustomSearchBar extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
+        minLines: 3,
+        maxLines: 5,
+        cursorColor: AppColors.fieldText,
         decoration: InputDecoration(
-          border: InputBorder.none,
           hintText: hintText,
-          icon: icon,
+          border: InputBorder.none,
         ),
       ),
     );
