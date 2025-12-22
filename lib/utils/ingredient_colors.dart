@@ -3,32 +3,32 @@ import '../theme/app_colors.dart';
 
 class IngredientColors {
   static const Map<String, Color> _colors = {
-    'Menta': AppColors.aperol,
-    'Basilico': AppColors.vodka,
+    'Menta': AppColors.menta,
+    'Basilico': AppColors.basilico,
 
-    'Sale': AppColors.gin,
-    'Pepe': AppColors.rumB,
+    'Sale': AppColors.sale,
+    'Pepe': AppColors.pepe,
 
-    'Succo di Lime': AppColors.rumB,
-    'SUcco di Limone': AppColors.rumB,
-    'Succo di Pomodoro': AppColors.rumB,
+    'Succo di Lime': AppColors.succolime,
+    'Succo di Limone': AppColors.succolimone,
+    'Succo di Pomodoro': AppColors.succopomodoro,
 
-    'Salsa Worcestershire': AppColors.rumB,
-    'Tabasco': AppColors.rumB,
+    'Salsa Worcestershire': AppColors.worch,
+    'Tabasco': AppColors.tabasco,
 
-    'Prosecco' : AppColors.rumB,
+    'Prosecco' : AppColors.prosecco,
 
-    'Limone' : AppColors.rumB,
-    'Arancia' : AppColors.rumB,
-    'Lime' : AppColors.rumB,
+    'Limone' : AppColors.limone,
+    'Arancia' : AppColors.arancia,
+    'Lime' : AppColors.lime,
 
-    'Soda' : AppColors.rumB,
-    'Acqua Tonica' : AppColors.rumB,
-    'Ginger Beer' : AppColors.rumB,
+    'Soda' : AppColors.soda,
+    'Acqua Tonica' : AppColors.soda,
+    'Ginger Beer' : AppColors.gingerbeer,
 
-    'Zucchero' : AppColors.rumB,
-    'Zucchero di Canna' : AppColors.rumB,
-    'Sciroppo di Zucchero' : AppColors.rumB,
+    'Zucchero' : AppColors.zucchero,
+    'Zucchero di Canna' : AppColors.zuccherocanna,
+    'Sciroppo di Zucchero' : AppColors.sciroppozucchero,
 
     'Rum Bianco' : AppColors.rumB,
     'Rum Scuro' : AppColors.rumS,
