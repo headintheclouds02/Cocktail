@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
 import 'package:flutter_cocktail/components/cocktail_card.dart';
+import 'package:flutter_cocktail/utils/category_colors.dart';
+import 'package:flutter_cocktail/utils/category_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
@@ -82,8 +84,8 @@ class _State extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CategoryCard(
-                  image: Image.asset('assets/img/spiriti/tequila.png'),
-                  color: AppColors.tequila,
+                  image: Image.asset(CategoryImages.getImage(cocktails[index].category)),
+                  color: CategoryColors.getColor(cocktails[index].category),
                   text: cocktails[index].category,
                 );
               },

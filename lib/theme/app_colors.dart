@@ -22,6 +22,14 @@ class AppColors {
   static const soda = Color(0xFFE8E8E8);
   static const tequila = Color(0xFFDBFDFF);
   static const vodka = Color(0xFFC6DBFF);
+  static const rumB = Color(0xFFC6DBFF);
+  static const rumS = Color(0xFFC6DBFF);
+  static const gin = Color(0xFFC6DBFF);
+  static const vermouth = Color(0xFFC6DBFF);
+  static const triple = Color(0xFFC6DBFF);
+
+
+
 
   static const bloody = Color(0xFFDB8573);
   static const margarita = Color(0xFFC9CCA4);
