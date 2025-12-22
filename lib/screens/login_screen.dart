@@ -3,11 +3,9 @@ import 'package:flutter_cocktail/components/input_field_custom.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/registration_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import '../components/custom_app_bar.dart';
 import '../components/custom_button.dart';
-import '../components/text_field.dart';
 import '../theme/app_colors.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,29 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.tapBarBackground,
-
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: SizedBox(
-                width: 45,
-                height: 45,
-                child: Image.asset("assets/img/generic/logo_wht_nobg.png"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                "Bevo, quindi sono",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.tapBarBackground,
+      appBar: CustomAppBar(
+        title: 'Bevo, quindi sono',
+        image: 'assets/img/generic/logo_wht_nobg.png',
+        enableBackPress: true,
       ),
 
       body: Stack(
@@ -140,9 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPage(),
-                            ),
+                            MaterialPageRoute(builder: (context) => MainPage()),
                             (route) => false,
                           );
                         },
