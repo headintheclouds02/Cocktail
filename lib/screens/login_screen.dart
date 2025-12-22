@@ -6,6 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_button.dart';
 import '../theme/app_colors.dart';
+import '../service/auth_service.dart';
+import '../service/token_storage.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +19,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordHidden = true;
+  final _tokenStorage = TokenStorage();
+  // baseUrl corretto: SOLO root del backend
+  late final _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _tokenStorage);
+
+  String _username = '';
+  String _password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
         image: 'assets/img/generic/logo_wht_nobg.png',
         enableBackPress: true,
       ),
-
       body: Stack(
         children: [
-          //livello 1
           Positioned(
             bottom: 0,
             right: -55,
             child: Image.asset("assets/img/generic/login.png", height: 500),
           ),
-
-          //livello 2
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 80),
             child: Stack(
@@ -72,14 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-
                       InputFieldCustom(
-                        onChanged: (String value) {},
+                        onChanged: (String value) {
+                          _username = value.trim();
+                        },
                         hintText: 'Inserisci username',
                         icon: SvgPicture.asset("assets/img/generic/user.svg"),
                         hideText: false,
                       ),
-
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
@@ -94,7 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       InputFieldCustom(
-                        onChanged: (String value) {},
+                        onChanged: (String value) {
+                          _password = value;
+                        },
                         hintText: 'Inserisci password',
                         hideText: isPasswordHidden,
                         icon: SvgPicture.asset(
@@ -116,12 +123,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       Spacer(),
                       CustomButton(
                         text: "Mixiamo!",
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => MainPage()),
-                            (route) => false,
-                          );
+                        onPressed: () async {
+                          if (_username.isEmpty || _password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Inserisci username e password')),
+                            );
+                            return;
+                          }
+
+                          try {
+                            await _authService.login(_username, _password);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => MainPage()),
+                                  (route) => false,
+                            );
+                          } catch (e) {
+                            final msg = e.toString();
+                            if (msg.contains('401')) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Credenziali non valide (401)')),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Login fallito: ${msg}')),
+                              );
+                            }
+                          }
                         },
                       ),
                       Spacer(),

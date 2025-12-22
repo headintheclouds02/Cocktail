@@ -6,6 +6,9 @@ import '../components/custom_button.dart';
 import '../components/input_field_custom.dart';
 import '../theme/app_colors.dart';
 import 'main_page.dart';
+import '../service/auth_service.dart';
+import '../service/token_storage.dart';
+import 'package:flutter/widgets.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -17,6 +20,9 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool isPasswordHidden = true;
   bool isPasswordHidden1 = true;
+
+  final _tokenStorage = TokenStorage();
+  late final _authService = AuthService(baseUrl: 'http://10.0.2.2:8081/api/auth/register', storage: _tokenStorage);
 
   @override
   Widget build(BuildContext context) {
@@ -198,11 +204,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     CustomButton(
                       text: "Iniziamo!",
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => MainPage()),
-                              (_) => false,
-                        );
+                        onPressed: () async {
+                          final payload = {
+                            'username': 'nuovoUtente',
+                            'password': 'pass',
+                            // altri campi richiesti dal backend
+                          };
+
+                          try {
+                            await _authService.register(payload);
+                            // opzionale: auto-login dopo registrazione
+                            final auth = await _authService.login(payload['username']!, payload['password']!);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => MainPage()),
+                                  (route) => false,
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Registrazione fallita: ${e.toString()}')),
+                            );
+                          }
+                        };
                       },
                     ),
 

@@ -1,0 +1,66 @@
+// File: `lib/services/auth_service.dart`
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../model/auth_response.dart';
+import 'token_storage.dart';
+
+class AuthService {
+  final String baseUrl;
+  final TokenStorage storage;
+
+  AuthService({required this.baseUrl, required this.storage});
+
+  Future<AuthResponse> login(String username, String password) async {
+    final uri = Uri.parse('$baseUrl/api/auth/login');
+    final res = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username, 'password': password}),
+    );
+
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      final auth = AuthResponse.fromJson(body);
+      await storage.saveAccessToken(auth.accessToken);
+      await storage.saveRefreshToken(auth.refreshToken);
+      return auth;
+    } else {
+      throw Exception('Login fallito: ${res.statusCode} ${res.body}');
+    }
+  }
+
+  Future<void> register(Map<String, dynamic> payload) async {
+    final uri = Uri.parse('$baseUrl/api/auth/register');
+    final res = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(payload),
+    );
+
+    if (res.statusCode != 201 && res.statusCode != 200) {
+      throw Exception('Registrazione fallita: ${res.statusCode} ${res.body}');
+    }
+  }
+
+  Future<AuthResponse> refresh() async {
+    final uri = Uri.parse('$baseUrl/api/auth/refresh');
+    final refreshToken = await storage.getRefreshToken();
+    if (refreshToken == null) throw Exception('Nessun refresh token');
+
+    final res = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'refreshToken': refreshToken}),
+    );
+
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body);
+      final auth = AuthResponse.fromJson(body);
+      await storage.saveAccessToken(auth.accessToken);
+      await storage.saveRefreshToken(auth.refreshToken);
+      return auth;
+    } else {
+      throw Exception('Refresh fallito: ${res.statusCode} ${res.body}');
+    }
+  }
+}

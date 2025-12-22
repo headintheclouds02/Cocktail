@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/menu_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  const FlutterSecureStorage();
   runApp(const MyApp());
 }
 
