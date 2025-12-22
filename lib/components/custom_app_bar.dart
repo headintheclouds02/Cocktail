@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool enableBackPress;
+  final String title;
+  final String image;
 
-  const CustomAppBar({super.key, this.enableBackPress = false});
+  const CustomAppBar({super.key, this.enableBackPress = false, required this.title, required this.image});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -13,6 +15,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,14 +42,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       width: 45,
                       height: 45,
                       child: Image.asset(
-                        "assets/img/generic/logo_pnk_nobg.png",
+                        widget.image,
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
-                      "Bevo, quindi sono",
+                      widget.title,
                       style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
                     ),
                   ),

@@ -24,6 +24,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       backgroundColor: AppColors.registrationBg,
       appBar: CustomAppBar(
         enableBackPress: true,
+        title: 'Bevo, quindi sono',
+        image: "assets/img/generic/logo_pnk_nobg.png",
       ),
       body: Stack(
         children: [
