@@ -119,6 +119,8 @@ class _State extends State<HomeScreen> {
                   text: cocktails[index].name,
                   description: cocktails[index].description,
                   ingredients: cocktails[index].cocktailIngredients,
+                  preparationMethod: cocktails[index].preparationMethod,
+                  glassType: cocktails[index].glassType,
                 );
               },
             ),

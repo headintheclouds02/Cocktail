@@ -8,6 +8,8 @@ class CocktailCard extends StatelessWidget {
   final Color color;
   final String text;
   final String description;
+  final String preparationMethod;
+  final String glassType;
   final List<CocktailIngredient> ingredients;
 
   const CocktailCard({
@@ -17,6 +19,8 @@ class CocktailCard extends StatelessWidget {
     required this.text,
     required this.description,
     required this.ingredients,
+    required this.preparationMethod,
+    required this.glassType,
   });
 
   @override
@@ -25,7 +29,16 @@ class CocktailCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailScreen(name: text, description: description, ingredients: ingredients, image: image,)),
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+              name: text,
+              description: description,
+              ingredients: ingredients,
+              image: image,
+              preparationMethod: preparationMethod,
+              glassType: glassType,
+            ),
+          ),
         );
       },
       child: Padding(
@@ -69,6 +82,4 @@ class CocktailCard extends StatelessWidget {
       ),
     );
   }
-
 }
-

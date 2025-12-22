@@ -6,13 +6,17 @@ class DetailScreen extends StatelessWidget {
   final String description;
   final List<CocktailIngredient> ingredients;
   final Image image;
+  final String preparationMethod;
+  final String glassType;
 
   const DetailScreen({
     super.key,
     required this.name,
     required this.description,
     required this.ingredients,
-    required this.image
+    required this.image,
+    required this.preparationMethod,
+    required this.glassType,
   });
 
   @override
@@ -34,11 +38,7 @@ class DetailScreen extends StatelessWidget {
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //IMMAGINE
-            SizedBox(
-              width: 400,
-              height: 400,
-              child: image,
-            ),
+            SizedBox(width: 400, height: 400, child: image),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
 
@@ -102,6 +102,46 @@ class DetailScreen extends StatelessWidget {
             //TESTO DI DESCRIZIONE
             Text(
               description,
+              style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+              //textAlign: TextAlign.center,
+            ),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                //TEXT "PROCEDIMENTO"
+                child: Text(
+                  "Procedimento",
+                  style: TextStyle(fontFamily: 'Gabarito', fontSize: 28),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ),
+
+            //TESTO DI DESCRIZIONE
+            Text(
+              preparationMethod,
+              style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+              //textAlign: TextAlign.center,
+            ),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                //TEXT "BICCHIERE"
+                child: Text(
+                  "Tipo di bicchiere",
+                  style: TextStyle(fontFamily: 'Gabarito', fontSize: 28),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ),
+
+            //TESTO DI DESCRIZIONE
+            Text(
+              glassType,
               style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
               //textAlign: TextAlign.center,
             ),

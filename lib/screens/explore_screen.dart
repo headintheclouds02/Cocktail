@@ -56,6 +56,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
           text: cocktails[index].name,
           description: cocktails[index].description,
           ingredients: cocktails[index].cocktailIngredients,
+          preparationMethod: cocktails[index].preparationMethod,
+          glassType: cocktails[index].glassType,
         );
       }),
     );
