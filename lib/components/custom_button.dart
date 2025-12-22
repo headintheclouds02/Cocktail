@@ -10,18 +10,21 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(
-        backgroundColor: AppColors.buttonEnabled,
-        foregroundColor: AppColors.buttonText,
-        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+    return SizedBox(
+      width: double.infinity,
+      child: TextButton(
+        onPressed: onPressed,
+        style: TextButton.styleFrom(
+          backgroundColor: AppColors.buttonEnabled,
+          foregroundColor: AppColors.buttonText,
+          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          textStyle: TextStyle(fontSize: 25),
         ),
-        textStyle: TextStyle(fontSize: 25),
+        child: Text(text, style: TextStyle(fontFamily: 'Gabarito')),
       ),
-      child: Text(text, style: TextStyle(fontFamily: 'Gabarito')),
     );
   }
 }
