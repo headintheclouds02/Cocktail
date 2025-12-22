@@ -39,6 +39,7 @@ flutter:
     - assets/img/icone/add1.svg
     - assets/img/icone/home.svg
     - assets/img/icone/profile.svg
+    - assets/img/icone/heart.svg
     - assets/img/bibite/soda.png
     - assets/img/bibite/ginger.png
     - assets/img/bibite/tonica.png

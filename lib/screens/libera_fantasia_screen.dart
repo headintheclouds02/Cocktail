@@ -144,7 +144,12 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
-              child: CustomButton(text: 'Salva Cocktail', onPressed: () {}),
+              child: CustomButton(
+                text: 'Salva Cocktail',
+                onPressed: () {
+                  //TODO: SALVATAGGIO COCKTAIL
+                },
+              ),
             ),
           ],
         ),

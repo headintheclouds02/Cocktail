@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import '../components/cocktail_card.dart';
+import '../model/cocktail.dart';
+import '../utils/cocktail_colors.dart';
+import '../utils/cocktail_images.dart';
+
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
+
+  @override
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
+
+class _FavoriteScreenState extends State<FavoriteScreen> {
+
+  List<Cocktail> cocktails = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCocktails();
+  }
+
+  void fetchCocktails() async {
+    final dio = Dio();
+
+    try {
+      var response = await dio.get('http://10.0.2.2:8081/api/public/cocktails');
+      print(response.statusCode);
+      List<dynamic> data = response.data['content'];
+
+      print(response);
+
+      setState(() {
+        cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
+      });
+    } catch (e) {
+      print("-----> $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: 2,
+      childAspectRatio: 3 / 4,
+      // Numero di colonne
+      padding: EdgeInsets.all(10),
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      children: List.generate(cocktails.length, (index) {
+        return CocktailCard(
+          image: Image.asset(CocktailImages.getImage(cocktails[index].name)),
+          color: CocktailColors.getColor(cocktails[index].name),
+          text: cocktails[index].name,
+          description: cocktails[index].description,
+          ingredients: cocktails[index].cocktailIngredients,
+          preparationMethod: cocktails[index].preparationMethod,
+          glassType: cocktails[index].glassType,
+        );
+      }),
+    );
+  }
+}
