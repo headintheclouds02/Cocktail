@@ -41,6 +41,8 @@ flutter:
     - assets/img/icone/home.svg
     - assets/img/icone/profile.svg
     - assets/img/bibite/soda.png
+    - assets/img/bibite/ginger.png
+    - assets/img/bibite/tonica.png
     - assets/img/cocktail/bloody.png
     - assets/img/cocktail/margarita.png
     - assets/img/cocktail/mojito.png
@@ -50,20 +52,27 @@ flutter:
     - assets/img/condimenti/tabasco.png
     - assets/img/condimenti/worsterstershire.png
     - assets/img/dolcificanti/zucchero.png
+    - assets/img/dolcificanti/sciroppozucchero.png
+    - assets/img/dolcificanti/zuccherocanna.png
     - assets/img/erbe/menta.png
+    - assets/img/erbe/basilico.png
     - assets/img/frutta/lime.png
+    - assets/img/frutta/limone.png
+    - assets/img/frutta/arancia.png
     - assets/img/spezie/pepe.png
     - assets/img/spezie/sale.png
     - assets/img/spiriti/aperol.png
     - assets/img/spiriti/campari.png
     - assets/img/spiriti/gin.png
     - assets/img/spiriti/rumbianco.png
+    - assets/img/spiriti/rumscuro.png
     - assets/img/spiriti/tequila.png
     - assets/img/spiriti/triplesec.png
     - assets/img/spiriti/vodka.png
     - assets/img/spiriti/vermouth.png
     - assets/img/succhi/succolime.png
     - assets/img/succhi/succopomodoro.png
+    - assets/img/succhi/succolimone.png
     - assets/img/vini/prosecco.png
     - assets/img/generic/logo_pnk_nobg.png
     - assets/img/generic/logo_wht_nobg.png

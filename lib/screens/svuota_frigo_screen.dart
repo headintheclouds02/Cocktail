@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_cocktail/utils/ingredient_colors.dart';
+import 'package:flutter_cocktail/utils/ingredient_images.dart';
 import '../components/category_card.dart';
 import '../model/ingredient.dart';
 import '../theme/app_colors.dart';
@@ -108,8 +110,8 @@ class _State extends State<SvuotaFrigoScreen> {
                       itemBuilder: (context, index) {
                         final ingredient = ingredients[index];
                         return CategoryCard(
-                          image: Image.asset('assets/img/spiriti/tequila.png'),
-                          color: AppColors.tequila,
+                          image: Image.asset(IngredientImages.getImage(ingredient.name)),
+                          color:IngredientColors.getColor(ingredient.name),
                           text: ingredient.name,
                         );
                       },
