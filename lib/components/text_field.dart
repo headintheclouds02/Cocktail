@@ -7,6 +7,9 @@ class TextFieldCustom extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final SvgPicture icon;
+  final int minLines;
+  final int maxLines;
+
 
   const TextFieldCustom({
     super.key,
@@ -14,6 +17,8 @@ class TextFieldCustom extends StatelessWidget {
     required this.hintText,
     this.controller,
     required this.icon,
+    required this.minLines,
+    required this.maxLines,
   });
 
   @override
@@ -27,8 +32,8 @@ class TextFieldCustom extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
-        minLines: 3,
-        maxLines: 5,
+        minLines: minLines,
+        maxLines: maxLines,
         cursorColor: AppColors.fieldText,
         decoration: InputDecoration(
           hintText: hintText,
