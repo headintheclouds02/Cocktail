@@ -46,6 +46,7 @@ flutter:
     - assets/img/cocktail/mojito.png
     - assets/img/cocktail/negroni.png
     - assets/img/cocktail/spritz.png
+    - assets/img/cocktail/default.jpg
     - assets/img/condimenti/tabasco.png
     - assets/img/condimenti/worsterstershire.png
     - assets/img/dolcificanti/zucchero.png

@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
 import '../theme/app_colors.dart';
+import '../utils/cocktail_colors.dart';
+import '../utils/cocktail_images.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -49,8 +51,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
       mainAxisSpacing: 10,
       children: List.generate(cocktails.length, (index) {
         return CocktailCard(
-          image: Image.asset('assets/img/cocktail/margarita.png'),
-          color: AppColors.margarita,
+          image: Image.asset(CocktailImages.getImage(cocktails[index].name)),
+          color: CocktailColors.getColor(cocktails[index].name),
           text: cocktails[index].name,
           description: cocktails[index].description,
           ingredients: cocktails[index].cocktailIngredients,
