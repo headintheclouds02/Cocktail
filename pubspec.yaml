@@ -17,8 +17,7 @@ dependencies:
   flutter_svg: ^1.1.6
   http: ^1.6.0
   dio: ^5.9.0
-
-
+  image_picker: ^1.2.1
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -40,29 +39,40 @@ flutter:
     - assets/img/icone/add1.svg
     - assets/img/icone/home.svg
     - assets/img/icone/profile.svg
+    - assets/img/icone/heart.svg
     - assets/img/bibite/soda.png
+    - assets/img/bibite/ginger.png
+    - assets/img/bibite/tonica.png
     - assets/img/cocktail/bloody.png
     - assets/img/cocktail/margarita.png
     - assets/img/cocktail/mojito.png
     - assets/img/cocktail/negroni.png
     - assets/img/cocktail/spritz.png
+    - assets/img/cocktail/default.jpg
     - assets/img/condimenti/tabasco.png
     - assets/img/condimenti/worsterstershire.png
     - assets/img/dolcificanti/zucchero.png
+    - assets/img/dolcificanti/sciroppozucchero.png
+    - assets/img/dolcificanti/zuccherocanna.png
     - assets/img/erbe/menta.png
+    - assets/img/erbe/basilico.png
     - assets/img/frutta/lime.png
+    - assets/img/frutta/limone.png
+    - assets/img/frutta/arancia.png
     - assets/img/spezie/pepe.png
     - assets/img/spezie/sale.png
     - assets/img/spiriti/aperol.png
     - assets/img/spiriti/campari.png
     - assets/img/spiriti/gin.png
     - assets/img/spiriti/rumbianco.png
+    - assets/img/spiriti/rumscuro.png
     - assets/img/spiriti/tequila.png
     - assets/img/spiriti/triplesec.png
     - assets/img/spiriti/vodka.png
     - assets/img/spiriti/vermouth.png
     - assets/img/succhi/succolime.png
     - assets/img/succhi/succopomodoro.png
+    - assets/img/succhi/succolimone.png
     - assets/img/vini/prosecco.png
     - assets/img/generic/logo_pnk_nobg.png
     - assets/img/generic/logo_wht_nobg.png

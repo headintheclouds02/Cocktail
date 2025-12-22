@@ -1,15 +1,17 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
 import 'package:flutter_cocktail/components/cocktail_card.dart';
-import 'package:flutter_cocktail/screens/add_screen.dart';
+import 'package:flutter_cocktail/utils/category_colors.dart';
+import 'package:flutter_cocktail/utils/category_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
 import '../model/cocktail.dart';
 import '../theme/app_colors.dart';
 import 'package:dio/dio.dart';
+import '../utils/cocktail_colors.dart';
+import '../utils/cocktail_images.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int) onChangePage;
@@ -82,8 +84,8 @@ class _State extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CategoryCard(
-                  image: Image.asset('assets/img/spiriti/tequila.png'),
-                  color: AppColors.tequila,
+                  image: Image.asset(CategoryImages.getImage(cocktails[index].category)),
+                  color: CategoryColors.getColor(cocktails[index].category),
                   text: cocktails[index].category,
                 );
               },
@@ -112,11 +114,13 @@ class _State extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CocktailCard(
-                  image: Image.asset('assets/img/spiriti/tequila.png'),
-                  color: AppColors.tequila,
+                  image: Image.asset(CocktailImages.getImage(cocktails[index].name)),
+                  color: CocktailColors.getColor(cocktails[index].name),
                   text: cocktails[index].name,
                   description: cocktails[index].description,
                   ingredients: cocktails[index].cocktailIngredients,
+                  preparationMethod: cocktails[index].preparationMethod,
+                  glassType: cocktails[index].glassType,
                 );
               },
             ),

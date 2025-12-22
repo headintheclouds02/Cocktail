@@ -66,7 +66,7 @@ class _CustomTapbarState extends State<CustomTapbar> {
             ),
             IconButton(
               icon: SvgPicture.asset(
-                'assets/img/icone/cart1.svg',
+                'assets/img/icone/heart.svg',
                 width: 20,
                 height: 20,
                 color: widget.currentIndex == 3 ? iconFocusedColor : iconUnfocusedColor,

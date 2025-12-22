@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
-import '../theme/app_colors.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
 
-class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
 
   @override
-  State<ExploreScreen> createState() => _ExploreScreenState();
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _ExploreScreenState extends State<ExploreScreen> {
+class _FavoriteScreenState extends State<FavoriteScreen> {
+
   List<Cocktail> cocktails = [];
 
   @override

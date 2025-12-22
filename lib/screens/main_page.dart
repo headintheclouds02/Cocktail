@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/screens/home_screen.dart';
 import 'package:flutter_cocktail/screens/explore_screen.dart';
 import 'package:flutter_cocktail/screens/add_screen.dart';
-import 'package:flutter_cocktail/screens/cart_screen.dart';
+import 'package:flutter_cocktail/screens/favorite_screen.dart';
 import 'package:flutter_cocktail/screens/profile_screen.dart';
 import '../components/custom_tapbar.dart';
 
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
     ),
     const ExploreScreen(),
     const AddScreen(),
-    const CartScreen(),
+    const FavoriteScreen(),
     const ProfileScreen(),
   ];
 
@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
     "Benvenuto!",
     "Esplora",
     "Sperimenta",
-    "Lista della spesa",
+    "Cocktail preferiti",
     "Profilo",
   ];
 
