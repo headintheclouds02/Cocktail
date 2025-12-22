@@ -5,12 +5,14 @@ class DetailScreen extends StatelessWidget {
   final String name;
   final String description;
   final List<CocktailIngredient> ingredients;
+  final Image image;
 
   const DetailScreen({
     super.key,
     required this.name,
     required this.description,
     required this.ingredients,
+    required this.image
   });
 
   @override
@@ -35,7 +37,7 @@ class DetailScreen extends StatelessWidget {
             SizedBox(
               width: 400,
               height: 400,
-              child: Image.asset('assets/img/cocktail/margarita.png'),
+              child: image,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),

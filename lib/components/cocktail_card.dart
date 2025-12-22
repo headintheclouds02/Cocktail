@@ -25,7 +25,7 @@ class CocktailCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailScreen(name: text, description: description, ingredients: ingredients, )),
+          MaterialPageRoute(builder: (context) => DetailScreen(name: text, description: description, ingredients: ingredients, image: image,)),
         );
       },
       child: Padding(
