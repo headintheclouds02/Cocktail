@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: MenuScreen(),
+      routes: {
+        '/login': (context) => MenuScreen(),
+      },
     );
   }
 }
