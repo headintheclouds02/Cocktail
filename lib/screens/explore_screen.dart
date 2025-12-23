@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
-import '../theme/app_colors.dart';
+import '../service/api_client.dart';
+import '../service/auth_service.dart';
+import '../service/token_storage.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
 
@@ -16,27 +19,52 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   List<Cocktail> cocktails = [];
 
+  late final TokenStorage _storage;
+  late final AuthService _authService;
+  late final ApiClient _apiClient;
+
   @override
   void initState() {
     super.initState();
+    _storage = TokenStorage();
+    _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _storage);
+    _apiClient = ApiClient(baseUrl: 'http://10.0.2.2:8081', authService: _authService, storage: _storage);
     fetchCocktails();
   }
 
   void fetchCocktails() async {
-    final dio = Dio();
-
     try {
-      var response = await dio.get('http://10.0.2.2:8081/api/public/cocktails');
-      print(response.statusCode);
-      List<dynamic> data = response.data['content'];
+      final token = await _storage.getAccessToken();
+      if (token == null || token.isEmpty) {
+        await _storage.clear();
 
-      print(response);
+        if (!mounted) return;
 
-      setState(() {
-        cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
-      });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sessione non valida, effettua il login.')),
+        );
+
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        return;
+      }
+
+      try {
+        final response = await _apiClient.dio.get('/api/user/cocktails');
+        // debug
+        print('cocktails status: ${response.statusCode}');
+        final List<dynamic> data = response.data['content'];
+        setState(() {
+          cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
+        });
+      } on DioError catch (e) {
+        print('Errore chiamata cocktails: ${e.response?.statusCode} ${e.message} ${e.response?.data}');
+      } catch (e) {
+        print('Errore inatteso chiamata cocktails: $e');
+      }
+    } on MissingPluginException catch (e) {
+      print('MissingPluginException: assicurati di chiamare WidgetsFlutterBinding.ensureInitialized() in main.dart. $e');
     } catch (e) {
-      print("-----> $e");
+      print('Errore recupero token: $e');
     }
   }
 
