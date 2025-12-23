@@ -3,7 +3,7 @@ import 'package:flutter_cocktail/model/cocktail_ingredient.dart';
 import '../screens/detail_screen.dart';
 import '../theme/app_colors.dart';
 
-class CocktailCard extends StatelessWidget {
+class CocktailCard extends StatefulWidget {
   final Image image;
   final Color color;
   final String text;
@@ -24,6 +24,19 @@ class CocktailCard extends StatelessWidget {
   });
 
   @override
+  State<CocktailCard> createState() => _CocktailCardState();
+}
+
+class _CocktailCardState extends State<CocktailCard> {
+  late bool _isFavorite;
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
@@ -31,12 +44,12 @@ class CocktailCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DetailScreen(
-              name: text,
-              description: description,
-              ingredients: ingredients,
-              image: image,
-              preparationMethod: preparationMethod,
-              glassType: glassType,
+              name: widget.text,
+              description: widget.description,
+              ingredients: widget.ingredients,
+              image: widget.image,
+              preparationMethod: widget.preparationMethod,
+              glassType: widget.glassType,
             ),
           ),
         );
@@ -47,7 +60,7 @@ class CocktailCard extends StatelessWidget {
           children: [
             Card(
               margin: const EdgeInsets.symmetric(horizontal: 16),
-              color: color,
+              color: widget.color,
               child: SizedBox(
                 width: 130,
                 height: 180,
@@ -55,16 +68,7 @@ class CocktailCard extends StatelessWidget {
                   children: [
                     Transform.translate(
                       offset: const Offset(-15, 5),
-                      child: image,
-                    ),
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Icon(
-                        Icons.favorite_border,
-                        color: AppColors.buttonEnabled,
-                        size: 18,
-                      ),
+                      child: widget.image,
                     ),
                   ],
                 ),
@@ -73,7 +77,7 @@ class CocktailCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                text,
+                widget.text,
                 style: const TextStyle(fontFamily: 'Gabarito', fontSize: 13),
               ),
             ),

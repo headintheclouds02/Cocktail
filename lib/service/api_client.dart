@@ -34,11 +34,14 @@ class ApiClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = await storage.getAccessToken();
+          print('🔥 TOKEN USATO: $token');
+
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
           handler.next(options);
         },
+
         onError: (error, handler) async {
           final status = error.response?.statusCode;
           if (status == 401) {
