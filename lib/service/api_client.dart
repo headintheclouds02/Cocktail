@@ -21,24 +21,26 @@ class ApiClient {
            headers: {'Content-Type': 'application/json'},
          ),
        ) {
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-      ),
-    );
+    //dio.interceptors.add(
+    //  LogInterceptor(
+    //    request: true,
+    //    requestBody: true,
+    //    responseBody: true,
+    //    requestHeader: true,
+    //  ),
+    //);
 
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = await storage.getAccessToken();
+
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
           handler.next(options);
         },
+
         onError: (error, handler) async {
           final status = error.response?.statusCode;
           if (status == 401) {
@@ -67,7 +69,6 @@ class ApiClient {
               }
             }
 
-            // Avvia refresh
             _isRefreshing = true;
             try {
               final newAuth = await authService.refresh();

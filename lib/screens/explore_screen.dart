@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
+import '../model/favorite.dart';
+import '../providers/favorite_provider.dart';
 import '../service/api_client.dart';
 import '../service/auth_service.dart';
 import '../service/token_storage.dart';
@@ -70,6 +73,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 3 / 4,
@@ -86,8 +91,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ingredients: cocktails[index].cocktailIngredients,
           preparationMethod: cocktails[index].preparationMethod,
           glassType: cocktails[index].glassType,
+          isFavorite: favoriteProvider.isFavorite(cocktails[index].id),
+          cocktailId: cocktails[index].id,
         );
       }),
     );
+
+
   }
 }
+
+

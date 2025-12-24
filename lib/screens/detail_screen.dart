@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/model/cocktail_ingredient.dart';
+import 'package:provider/provider.dart';
+import '../providers/favorite_provider.dart';
+import '../service/api_client.dart';
+import '../service/auth_service.dart';
+import '../service/token_storage.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final String name;
   final String description;
   final List<CocktailIngredient> ingredients;
   final Image image;
   final String preparationMethod;
   final String glassType;
+  final int cocktailId;
+  final bool isFavorite;
 
   const DetailScreen({
     super.key,
@@ -17,19 +24,49 @@ class DetailScreen extends StatelessWidget {
     required this.image,
     required this.preparationMethod,
     required this.glassType,
+    required this.isFavorite,
+    required this.cocktailId,
   });
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+class _DetailScreenState extends State<DetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _toggleFavorite() async {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context, listen: false);
+
+    try {
+      await favoriteProvider.toggleFavorite(widget.cocktailId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error during updating favorites')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final isFavorite = favoriteProvider.isFavorite(widget.cocktailId);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          name,
+          widget.name,
           style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
         ),
         centerTitle: false,
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+          IconButton(
+            onPressed: _toggleFavorite,
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red : Colors.grey,
+            ),
+          ),
         ],
       ),
       body: Padding(
@@ -38,7 +75,7 @@ class DetailScreen extends StatelessWidget {
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //IMMAGINE
-            SizedBox(width: 400, height: 400, child: image),
+            SizedBox(width: 400, height: 400, child: widget.image),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
 
@@ -51,7 +88,7 @@ class DetailScreen extends StatelessWidget {
             ),
 
             //TESTI INGREDIENTI, DINAMICO IN BASE AL NUMERO DI INGREDIENTI
-            for (var ingredient in ingredients)
+            for (var ingredient in widget.ingredients)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +126,7 @@ class DetailScreen extends StatelessWidget {
 
             //TESTO DI DESCRIZIONE
             Text(
-              description,
+              widget.description,
               style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
               //textAlign: TextAlign.center,
             ),
@@ -109,7 +146,7 @@ class DetailScreen extends StatelessWidget {
 
             //TESTO DI DESCRIZIONE
             Text(
-              preparationMethod,
+              widget.preparationMethod,
               style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
               //textAlign: TextAlign.center,
             ),
@@ -129,7 +166,7 @@ class DetailScreen extends StatelessWidget {
 
             //TESTO DI DESCRIZIONE
             Text(
-              glassType,
+              widget.glassType,
               style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
               //textAlign: TextAlign.center,
             ),
@@ -139,3 +176,4 @@ class DetailScreen extends StatelessWidget {
     );
   }
 }
+

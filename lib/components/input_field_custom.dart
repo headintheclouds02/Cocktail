@@ -6,7 +6,7 @@ class InputFieldCustom extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final String hintText;
   final TextEditingController? controller;
-  final SvgPicture icon;
+  final SvgPicture? icon;
   final bool hideText;
   final Widget? suffixIcon;
 

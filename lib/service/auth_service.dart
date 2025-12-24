@@ -24,7 +24,7 @@ class AuthService {
       await storage.saveRefreshToken(auth.refreshToken);
       return auth;
     } else {
-      throw Exception('Login fallito: ${res.statusCode} ${res.body}');
+      throw Exception('Login failed: ${res.statusCode} ${res.body}');
     }
   }
 
@@ -37,14 +37,14 @@ class AuthService {
     );
 
     if (res.statusCode != 201 && res.statusCode != 200) {
-      throw Exception('Registrazione fallita: ${res.statusCode} ${res.body}');
+      throw Exception('Registration failed: ${res.statusCode} ${res.body}');
     }
   }
 
   Future<AuthResponse> refresh() async {
     final uri = Uri.parse('$baseUrl/api/auth/refresh');
     final refreshToken = await storage.getRefreshToken();
-    if (refreshToken == null) throw Exception('Nessun refresh token');
+    if (refreshToken == null) throw Exception('No refresh token');
 
     final res = await http.post(
       uri,
@@ -59,7 +59,7 @@ class AuthService {
       await storage.saveRefreshToken(auth.refreshToken);
       return auth;
     } else {
-      throw Exception('Refresh fallito: ${res.statusCode} ${res.body}');
+      throw Exception('Refresh failed: ${res.statusCode} ${res.body}');
     }
   }
 }

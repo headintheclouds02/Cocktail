@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/components/custom_button.dart';
+import 'package:flutter_cocktail/components/input_field_custom.dart';
 import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,15 +42,11 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: CustomSearchBar(
+              child: InputFieldCustom(
                 hintText: ('Scegli il tuo nome'),
                 onChanged: (value) {},
-                icon: SvgPicture.asset(
-                  'assets/img/icone/search.svg',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.iconFocused,
-                ),
+                hideText: false,
+                icon: null,
               ),
             ),
 

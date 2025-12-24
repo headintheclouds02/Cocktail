@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/model/cocktail_ingredient.dart';
 import '../screens/detail_screen.dart';
-import '../theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import '../providers/favorite_provider.dart';
 
 class CocktailCard extends StatelessWidget {
   final Image image;
@@ -11,6 +12,8 @@ class CocktailCard extends StatelessWidget {
   final String preparationMethod;
   final String glassType;
   final List<CocktailIngredient> ingredients;
+  final bool isFavorite;
+  final int cocktailId;
 
   const CocktailCard({
     super.key,
@@ -21,22 +24,29 @@ class CocktailCard extends StatelessWidget {
     required this.ingredients,
     required this.preparationMethod,
     required this.glassType,
+    required this.isFavorite,
+    required this.cocktailId,
   });
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
+
     return InkWell(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => DetailScreen(
+              cocktailId: cocktailId,
               name: text,
               description: description,
               ingredients: ingredients,
               image: image,
               preparationMethod: preparationMethod,
               glassType: glassType,
+              isFavorite: currentIsFavorite,
             ),
           ),
         );
@@ -57,13 +67,26 @@ class CocktailCard extends StatelessWidget {
                       offset: const Offset(-15, 5),
                       child: image,
                     ),
+
+                    // Icona cuore con offset (-5, -15)
                     Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Icon(
-                        Icons.favorite_border,
-                        color: AppColors.buttonEnabled,
-                        size: 18,
+                      top: -5,
+                      right: -5,
+                      child: IconButton(
+                        icon: Icon(
+                          currentIsFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: currentIsFavorite ? Colors.red : Colors.black,
+                          size: 20,
+                        ),
+                        onPressed: () async {
+                          try {
+                            await favoriteProvider.toggleFavorite(cocktailId);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Errore durante l\'aggiornamento dei preferiti')),
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
