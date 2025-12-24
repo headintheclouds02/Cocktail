@@ -73,7 +73,6 @@ class _MainPageState extends State<MainPage> {
       ),
       body: PageView(
         controller: _pageController,
-
         // serve a disabilitare lo swipe manuale tra le schermate
         //physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/model/cocktail_ingredient.dart';
 import '../screens/detail_screen.dart';
-import '../theme/app_colors.dart';
 
 class CocktailCard extends StatefulWidget {
   final Image image;

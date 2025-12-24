@@ -81,8 +81,7 @@ class _StartupState extends State<Startup> {
   @override
   Widget build(BuildContext context) {
     // schermo di avvio semplice
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
+    return Scaffold(
+      body: Center(child: Image.asset('assets/img/generic/splash.png')));
   }
 }
