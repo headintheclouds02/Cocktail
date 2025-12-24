@@ -4,11 +4,22 @@ import 'package:flutter_cocktail/screens/menu_screen.dart';
 import 'package:flutter_cocktail/service/auth_service.dart';
 import 'package:flutter_cocktail/service/token_storage.dart';
 import 'package:flutter_cocktail/service/api_client.dart';
+import 'package:provider/provider.dart';
+import 'providers/favorite_provider.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        // TODO: implements other providers here
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

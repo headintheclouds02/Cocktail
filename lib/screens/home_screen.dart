@@ -6,9 +6,12 @@ import 'package:flutter_cocktail/components/cocktail_card.dart';
 import 'package:flutter_cocktail/utils/category_colors.dart';
 import 'package:flutter_cocktail/utils/category_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
 import '../model/cocktail.dart';
+import '../model/favorite.dart';
+import '../providers/favorite_provider.dart';
 import '../service/token_storage.dart';
 import '../theme/app_colors.dart';
 import 'package:dio/dio.dart';
@@ -60,26 +63,28 @@ class _State extends State<HomeScreen> {
 
       try {
         final response = await _apiClient.dio.get('/api/user/cocktails');
-        // debug
-        print('cocktails status: ${response.statusCode}');
+
         final List<dynamic> data = response.data['content'];
         setState(() {
           cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
         });
       } on DioError catch (e) {
-        print('Errore chiamata cocktails: ${e.response?.statusCode} ${e.message} ${e.response?.data}');
+        print('----->Error calling cocktails: ${e.response?.statusCode} ${e.message} ${e.response?.data}');
       } catch (e) {
-        print('Errore inatteso chiamata cocktails: $e');
+        print('--------> Unexpected error calling cocktails: $e');
       }
     } on MissingPluginException catch (e) {
       print('MissingPluginException: assicurati di chiamare WidgetsFlutterBinding.ensureInitialized() in main.dart. $e');
     } catch (e) {
-      print('Errore recupero token: $e');
+      print('Error getting token: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
@@ -154,6 +159,8 @@ class _State extends State<HomeScreen> {
                   ingredients: cocktails[index].cocktailIngredients,
                   preparationMethod: cocktails[index].preparationMethod,
                   glassType: cocktails[index].glassType,
+                  isFavorite: favoriteProvider.isFavorite(cocktails[index].id),
+                  cocktailId: cocktails[index].id,
                 );
               },
             ),

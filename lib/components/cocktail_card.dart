@@ -10,6 +10,10 @@ class CocktailCard extends StatefulWidget {
   final String preparationMethod;
   final String glassType;
   final List<CocktailIngredient> ingredients;
+  final bool isFavorite;
+  final int cocktailId;
+
+
 
   const CocktailCard({
     super.key,
@@ -20,6 +24,9 @@ class CocktailCard extends StatefulWidget {
     required this.ingredients,
     required this.preparationMethod,
     required this.glassType,
+    required this.isFavorite,
+    required this.cocktailId,
+
   });
 
   @override
@@ -28,7 +35,7 @@ class CocktailCard extends StatefulWidget {
 
 class _CocktailCardState extends State<CocktailCard> {
   late bool _isFavorite;
-  bool _loading = false;
+  //bool _loading = false;
 
   @override
   void initState() {
@@ -43,12 +50,14 @@ class _CocktailCardState extends State<CocktailCard> {
           context,
           MaterialPageRoute(
             builder: (context) => DetailScreen(
+              cocktailId: widget.cocktailId,
               name: widget.text,
               description: widget.description,
               ingredients: widget.ingredients,
               image: widget.image,
               preparationMethod: widget.preparationMethod,
               glassType: widget.glassType,
+              isFavorite: widget.isFavorite,
             ),
           ),
         );
