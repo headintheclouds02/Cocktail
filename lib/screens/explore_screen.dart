@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
-import '../model/favorite.dart';
 import '../providers/favorite_provider.dart';
 import '../service/api_client.dart';
 import '../service/auth_service.dart';
@@ -30,8 +29,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
   void initState() {
     super.initState();
     _storage = TokenStorage();
-    _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _storage);
-    _apiClient = ApiClient(baseUrl: 'http://10.0.2.2:8081', authService: _authService, storage: _storage);
+    _authService = AuthService(
+      baseUrl: 'http://10.0.2.2:8081',
+      storage: _storage,
+    );
+    _apiClient = ApiClient(
+      baseUrl: 'http://10.0.2.2:8081',
+      authService: _authService,
+      storage: _storage,
+    );
     fetchCocktails();
   }
 
@@ -44,31 +50,26 @@ class _ExploreScreenState extends State<ExploreScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sessione non valida, effettua il login.')),
+          const SnackBar(
+            content: Text('Sessione non valida, effettua il login.'),
+          ),
         );
 
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+        Navigator.of(
+          context,
+        ).pushNamedAndRemoveUntil('/login', (route) => false);
         return;
       }
 
       try {
         final response = await _apiClient.dio.get('/api/user/cocktails');
-        // debug
-        print('cocktails status: ${response.statusCode}');
         final List<dynamic> data = response.data['content'];
         setState(() {
           cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
         });
-      } on DioError catch (e) {
-        print('Errore chiamata cocktails: ${e.response?.statusCode} ${e.message} ${e.response?.data}');
-      } catch (e) {
-        print('Errore inatteso chiamata cocktails: $e');
-      }
+      } on DioError catch (e) {}
     } on MissingPluginException catch (e) {
-      print('MissingPluginException: assicurati di chiamare WidgetsFlutterBinding.ensureInitialized() in main.dart. $e');
-    } catch (e) {
-      print('Errore recupero token: $e');
-    }
+    } catch (e) {}
   }
 
   @override
@@ -96,9 +97,5 @@ class _ExploreScreenState extends State<ExploreScreen> {
         );
       }),
     );
-
-
   }
 }
-
-

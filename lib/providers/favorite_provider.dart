@@ -54,7 +54,6 @@ class FavoriteProvider extends ChangeNotifier {
       final List<dynamic> data = response.data;
       _favorites = data.map((json) => Favorite.fromJson(json)).toList();
     } catch (e) {
-      print('Errore fetchFavorites: $e');
       _favorites = [];
     }
 
@@ -75,7 +74,6 @@ class FavoriteProvider extends ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Errore toggleFavorite: $e');
       rethrow;
     }
   }
