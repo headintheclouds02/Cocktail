@@ -13,6 +13,7 @@ import '../providers/favorite_provider.dart';
 import '../theme/app_colors.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
+import 'category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int) onChangePage;
@@ -93,6 +94,17 @@ class _State extends State<HomeScreen> {
                   ),
                   color: CategoryColors.getColor(cocktails[index].category),
                   text: cocktails[index].category,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryScreen(
+                          category: cocktails[index].category,
+                          cocktails: cocktails,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

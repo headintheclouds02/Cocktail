@@ -81,6 +81,7 @@ class CocktailCard extends StatelessWidget {
                         onPressed: () async {
                           try {
                             await favoriteProvider.toggleFavorite(cocktailId);
+
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Errore durante l\'aggiornamento dei preferiti')),

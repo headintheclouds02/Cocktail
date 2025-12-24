@@ -9,25 +9,37 @@ import 'providers/favorite_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(
+          create: (_) => FavoriteProvider(
+            onShowMessage: (msg) {
+              scaffoldMessengerKey.currentState?.showSnackBar(
+                SnackBar(content: Text(msg)),
+              );
+            },
+          ),
+        ),
         ChangeNotifierProvider(create: (_) => AuthApiProvider()),
         // TODO: implements other providers here
       ],
-      child: const MyApp(),
+      child: MyApp(scaffoldMessengerKey: scaffoldMessengerKey),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
+  const MyApp({super.key, required this.scaffoldMessengerKey});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      scaffoldMessengerKey: scaffoldMessengerKey,
       home: const Startup(),
       routes: {
         '/login': (context) => MenuScreen(),
@@ -93,11 +105,9 @@ class _StartupState extends State<Startup> {
 
   @override
   Widget build(BuildContext context) {
-    // schermo di avvio semplice
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Image.asset('assets/img/generic/splash.png')) ,
+      body: Center(child: Image.asset('assets/img/generic/splash.png')),
     );
   }
 }
