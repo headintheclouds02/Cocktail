@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../model/auth_response.dart';
 import '../model/cocktail.dart';
 import '../service/api_client.dart';
 import '../service/auth_service.dart';
@@ -15,6 +16,7 @@ class AuthApiProvider with ChangeNotifier {
   ApiClient get apiClient => _apiClient;
 
   AuthApiProvider() {
+    //
     _storage = TokenStorage();
     _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _storage);
     _apiClient = ApiClient(
@@ -37,6 +39,7 @@ class AuthApiProvider with ChangeNotifier {
     final List<dynamic> data = response.data['content'];
     return data.map((json) => Cocktail.fromJson(json)).toList();
   }
+
 
 
   Future<void> _init() async {

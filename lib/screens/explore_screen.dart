@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
+import '../providers/auth_api_provider.dart';
 import '../providers/favorite_provider.dart';
-import '../service/api_client.dart';
-import '../service/auth_service.dart';
-import '../service/token_storage.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
 
@@ -21,55 +17,29 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   List<Cocktail> cocktails = [];
 
-  late final TokenStorage _storage;
-  late final AuthService _authService;
-  late final ApiClient _apiClient;
-
   @override
   void initState() {
     super.initState();
-    _storage = TokenStorage();
-    _authService = AuthService(
-      baseUrl: 'http://10.0.2.2:8081',
-      storage: _storage,
-    );
-    _apiClient = ApiClient(
-      baseUrl: 'http://10.0.2.2:8081',
-      authService: _authService,
-      storage: _storage,
-    );
     fetchCocktails();
   }
 
   void fetchCocktails() async {
+    final apiProvider = Provider.of<AuthApiProvider>(context, listen: false);
+
     try {
-      final token = await _storage.getAccessToken();
-      if (token == null || token.isEmpty) {
-        await _storage.clear();
-
+      final fetchedCocktails = await apiProvider.fetchCocktails();
+      setState(() {
+        cocktails = fetchedCocktails;
+      });
+    } catch (e) {
+      if (e.toString().contains('Session expired')) {
         if (!mounted) return;
-
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Sessione non valida, effettua il login.'),
-          ),
+          const SnackBar(content: Text('Session expired, login.')),
         );
-
-        Navigator.of(
-          context,
-        ).pushNamedAndRemoveUntil('/login', (route) => false);
-        return;
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
       }
-
-      try {
-        final response = await _apiClient.dio.get('/api/user/cocktails');
-        final List<dynamic> data = response.data['content'];
-        setState(() {
-          cocktails = data.map((json) => Cocktail.fromJson(json)).toList();
-        });
-      } on DioError catch (e) {}
-    } on MissingPluginException catch (e) {
-    } catch (e) {}
+    }
   }
 
   @override
