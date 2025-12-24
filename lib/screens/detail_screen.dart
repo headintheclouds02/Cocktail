@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/model/cocktail_ingredient.dart';
 import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
-import '../service/api_client.dart';
-import '../service/auth_service.dart';
-import '../service/token_storage.dart';
 
 class DetailScreen extends StatefulWidget {
   final String name;

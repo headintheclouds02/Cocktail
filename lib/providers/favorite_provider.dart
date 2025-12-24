@@ -11,6 +11,7 @@
 // Tiene traccia dello stato di caricamento con _isLoading.
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../model/favorite.dart';
 import '../service/api_client.dart';
 import '../service/auth_service.dart';
@@ -24,11 +25,14 @@ class FavoriteProvider extends ChangeNotifier {
   late final TokenStorage _storage;
   late final AuthService _authService;
   late final ApiClient _apiClient;
+  final void Function(String message)? _onShowMessage;
+
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  FavoriteProvider() {
+  FavoriteProvider({void Function(String message)? onShowMessage})
+      : _onShowMessage = onShowMessage {
     _storage = TokenStorage();
     _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _storage);
     _apiClient = ApiClient(baseUrl: 'http://10.0.2.2:8081', authService: _authService, storage: _storage);
@@ -43,7 +47,6 @@ class FavoriteProvider extends ChangeNotifier {
       final token = await _storage.getAccessToken();
       if (token == null || token.isEmpty) {
         await _storage.clear();
-        // Qui puoi decidere come gestire logout o redirect, eventualmente con un callback
         _favorites = [];
         _isLoading = false;
         notifyListeners();
@@ -54,7 +57,6 @@ class FavoriteProvider extends ChangeNotifier {
       final List<dynamic> data = response.data;
       _favorites = data.map((json) => Favorite.fromJson(json)).toList();
     } catch (e) {
-      print('Errore fetchFavorites: $e');
       _favorites = [];
     }
 
@@ -68,14 +70,14 @@ class FavoriteProvider extends ChangeNotifier {
       if (isFav) {
         await _apiClient.dio.delete('/api/favorites/$cocktailId');
         _favorites.removeWhere((f) => f.cocktail.id == cocktailId);
+        _onShowMessage?.call('Cocktail rimosso dai preferiti');
       } else {
         await _apiClient.dio.put('/api/favorites/toggle/$cocktailId');
-        // Per semplicità, ricarichiamo la lista da backend
         await fetchFavorites();
+        _onShowMessage?.call('Cocktail aggiunto ai preferiti');
       }
       notifyListeners();
     } catch (e) {
-      print('Errore toggleFavorite: $e');
       rethrow;
     }
   }

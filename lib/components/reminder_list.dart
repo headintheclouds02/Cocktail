@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cocktail/theme/app_colors.dart';
-
 import '../model/ingredient_entry.dart';
 
 class ReminderList extends StatefulWidget {

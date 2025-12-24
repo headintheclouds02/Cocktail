@@ -5,7 +5,6 @@ import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
-import '../components/search_bar.dart';
 import '../theme/app_colors.dart';
 
 class LiberaFantasiaScreen extends StatefulWidget {

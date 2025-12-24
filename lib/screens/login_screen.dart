@@ -8,7 +8,6 @@ import '../components/custom_button.dart';
 import '../theme/app_colors.dart';
 import '../service/auth_service.dart';
 import '../service/token_storage.dart';
-import 'package:flutter/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -146,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Login fallito: ${msg}')),
+                                SnackBar(content: Text('Login failed: $msg')),
                               );
                             }
                           }

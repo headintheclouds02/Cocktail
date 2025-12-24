@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/providers/auth_api_provider.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/menu_screen.dart';
 import 'package:flutter_cocktail/service/auth_service.dart';
 import 'package:flutter_cocktail/service/token_storage.dart';
-import 'package:flutter_cocktail/service/api_client.dart';
 import 'package:provider/provider.dart';
 import 'providers/favorite_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(
+          create: (_) => FavoriteProvider(
+            onShowMessage: (msg) {
+              scaffoldMessengerKey.currentState?.showSnackBar(
+                SnackBar(content: Text(msg)),
+              );
+            },
+          ),
+        ),
+        ChangeNotifierProvider(create: (_) => AuthApiProvider()),
         // TODO: implements other providers here
       ],
-      child: const MyApp(),
+      child: MyApp(scaffoldMessengerKey: scaffoldMessengerKey),
     ),
   );
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
+  const MyApp({super.key, required this.scaffoldMessengerKey});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      scaffoldMessengerKey: scaffoldMessengerKey,
       home: const Startup(),
       routes: {
         '/login': (context) => MenuScreen(),
@@ -39,6 +51,7 @@ class MyApp extends StatelessWidget {
 
 class Startup extends StatefulWidget {
   const Startup({super.key});
+
   @override
   State<Startup> createState() => _StartupState();
 }
@@ -46,13 +59,14 @@ class Startup extends StatefulWidget {
 class _StartupState extends State<Startup> {
   final TokenStorage _storage = TokenStorage();
   late final AuthService _authService;
-  late final ApiClient _apiClient;
 
   @override
   void initState() {
     super.initState();
-    _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _storage);
-    _apiClient = ApiClient(baseUrl: 'http://10.0.2.2:8081', authService: _authService, storage: _storage, onLogout: _onLogout);
+    _authService = AuthService(
+      baseUrl: 'http://10.0.2.2:8081',
+      storage: _storage,
+    );
     _checkLogin();
   }
 
@@ -91,8 +105,9 @@ class _StartupState extends State<Startup> {
 
   @override
   Widget build(BuildContext context) {
-    // schermo di avvio semplice
     return Scaffold(
-      body: Center(child: Image.asset('assets/img/generic/splash.png')));
+      backgroundColor: Colors.white,
+      body: Center(child: Image.asset('assets/img/generic/splash.png')),
+    );
   }
 }

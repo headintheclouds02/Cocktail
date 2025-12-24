@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
-
 class CategoryCard extends StatelessWidget {
   final Image image;
   final Color color;
   final String text;
+  final VoidCallback? onTap;
 
   const CategoryCard({
     super.key,
     required this.image,
     required this.color,
     required this.text,
+    this.onTap,
   });
 
   @override
@@ -19,7 +19,7 @@ class CategoryCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: InkWell(
-        onTap:() {},
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
