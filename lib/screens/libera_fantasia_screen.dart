@@ -3,8 +3,10 @@ import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:flutter_cocktail/components/input_field_custom.dart';
 import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
+import 'package:flutter_cocktail/model/ingredient.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
+import '../model/ingredient_entry.dart';
 import '../theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/save_provider.dart';
@@ -26,7 +28,8 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
   late String categoria = '';
   late String procedimento = '';
   late String tipoBicchiere = '';
-  late List<String> ingredienti = [];
+  late String immagine = '';
+  late List<IngredientEntry> ingredienti = [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +71,13 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               ),
             ),
 
-            ReminderList(),
+            ReminderList(
+              onChanged: (updatedList) {
+                setState(() {
+                  ingredienti = updatedList;
+                });
+              },
+            ),
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -163,10 +172,17 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                   final payload = {
                     'name': nomeCocktail,
                     'description': descrizione,
-                    'category': categoria,
-                    'procedure': procedimento,
+                    'category': "Creato da me",
                     'glassType': tipoBicchiere,
-                    'ingredients': ingredienti,
+                    'preparationMethod': procedimento,
+                    'imageUrl' : "",
+                    'alcoholic' : true,
+                    'ingredients':  ingredienti.map((ing) => {
+                      'name': ing.name,
+                      'quantity': '${ing.quantity} ${ing.unit}',
+                      'category': ing.category ?? '',
+                      'description': ing.description ?? ''
+                    }).toList(),
                   };
 
                   try {
@@ -175,6 +191,7 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Cocktail creato con successo')),
                     );
+                    Navigator.pop(context);
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Errore nel salvataggio')),

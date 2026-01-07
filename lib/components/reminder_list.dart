@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '../model/ingredient_entry.dart';
 
 class ReminderList extends StatefulWidget {
-  const ReminderList({super.key});
+  final ValueChanged<List<IngredientEntry>> onChanged;
+
+  const ReminderList({super.key, required this.onChanged});
 
   @override
   _ReminderListState createState() => _ReminderListState();
@@ -17,6 +19,7 @@ class _ReminderListState extends State<ReminderList> {
     setState(() {
       items.add(IngredientEntry());
     });
+    widget.onChanged(items);
   }
 
   @override
@@ -44,6 +47,8 @@ class _ReminderListState extends State<ReminderList> {
                         setState(() {
                           item.quantity = value;
                         });
+                        widget.onChanged(items);
+
                       },
                     ),
                   ),
@@ -55,6 +60,7 @@ class _ReminderListState extends State<ReminderList> {
                         setState(() {
                           item.unit = value;
                         });
+                        widget.onChanged(items);
                       }
                     },
                     items: units
@@ -76,6 +82,7 @@ class _ReminderListState extends State<ReminderList> {
                         setState(() {
                           item.name = value;
                         });
+                        widget.onChanged(items);
                       },
                     ),
                   ),

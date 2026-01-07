@@ -17,6 +17,9 @@ class SaveProvider extends ChangeNotifier {
 
     try {
       await api.dio.post('/api/cocktails', data: payload);
+
+    } catch(e) {
+      print("------------ $e");
     } finally {
       isLoading = false;
       notifyListeners();
