@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_cocktail/components/category_card.dart';
 import 'package:flutter_cocktail/components/cocktail_card.dart';
+import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:flutter_cocktail/utils/category_colors.dart';
 import 'package:flutter_cocktail/utils/category_images.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
 import '../model/cocktail.dart';
-import '../providers/auth_api_provider.dart';
 import '../providers/favorite_provider.dart';
 import '../theme/app_colors.dart';
 import '../utils/cocktail_colors.dart';
@@ -34,7 +34,7 @@ class _State extends State<HomeScreen> {
   }
 
   void fetchCocktails() async {
-    final apiProvider = Provider.of<AuthApiProvider>(context, listen: false);
+    final apiProvider = Provider.of<CocktailProvider>(context, listen: false);
 
     try {
       final fetchedCocktails = await apiProvider.fetchCocktails();

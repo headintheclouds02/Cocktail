@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/providers/auth_api_provider.dart';
+import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:flutter_cocktail/providers/save_provider.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/menu_screen.dart';
+import 'package:flutter_cocktail/service/api_client.dart';
 import 'package:flutter_cocktail/service/auth_service.dart';
 import 'package:flutter_cocktail/service/token_storage.dart';
 import 'package:provider/provider.dart';
@@ -11,12 +13,32 @@ import 'providers/favorite_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  final tokenStorage = TokenStorage();
+  final authService = AuthService(
+    baseUrl: 'http://10.0.2.2:8081',
+    storage: tokenStorage,
+  );
+  final apiClient = ApiClient(
+    baseUrl: 'http://10.0.2.2:8081',
+    authService: authService,
+    storage: tokenStorage,
+    onLogout: () {
+      navigatorKey.currentState?.pushNamedAndRemoveUntil('/login', (r) => false);
+    },
+  );
 
   runApp(
     MultiProvider(
       providers: [
+        Provider.value(value: tokenStorage),
+        Provider.value(value: authService),
+        Provider.value(value: apiClient),
+
         ChangeNotifierProvider(
-          create: (_) => FavoriteProvider(
+          create: (ctx) => FavoriteProvider(
+            api: ctx.read<ApiClient>(),
             onShowMessage: (msg) {
               scaffoldMessengerKey.currentState?.showSnackBar(
                 SnackBar(content: Text(msg)),
@@ -24,26 +46,51 @@ void main() async {
             },
           ),
         ),
-        ChangeNotifierProvider(create: (_) => AuthApiProvider()),
+        ChangeNotifierProvider(
+          create: (ctx) => AuthApiProvider(
+            authService: ctx.read<AuthService>(),
+          ),
+        ),
 
-        ChangeNotifierProvider(create: (_) => SaveProvider()),
+        ChangeNotifierProvider(
+          create: (ctx) => SaveProvider(
+            api: ctx.read(),
+          ),
+        ),
 
-        // TODO: implements other providers here
+        ChangeNotifierProvider(
+          create: (ctx) => CocktailProvider(
+            apiClient: ctx.read<ApiClient>(),
+            storage: ctx.read<TokenStorage>(),
+          ),
+        ),
+
+
       ],
-      child: MyApp(scaffoldMessengerKey: scaffoldMessengerKey),
+      child: MyApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        navigatorKey: navigatorKey,
+      ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
-  const MyApp({super.key, required this.scaffoldMessengerKey});
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const MyApp({
+    super.key,
+    required this.scaffoldMessengerKey,
+    required this.navigatorKey,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       scaffoldMessengerKey: scaffoldMessengerKey,
+      navigatorKey: navigatorKey,
       home: const Startup(),
       routes: {
         '/login': (context) => MenuScreen(),
@@ -61,22 +108,16 @@ class Startup extends StatefulWidget {
 }
 
 class _StartupState extends State<Startup> {
-  final TokenStorage _storage = TokenStorage();
-  late final AuthService _authService;
+  late TokenStorage _storage;
+  late AuthService _authService;
 
   @override
   void initState() {
     super.initState();
-    _authService = AuthService(
-      baseUrl: 'http://10.0.2.2:8081',
-      storage: _storage,
-    );
+    // Prendo le istanze da Provider per evitare duplicati
+    _storage = context.read<TokenStorage>();
+    _authService = context.read<AuthService>();
     _checkLogin();
-  }
-
-  void _onLogout() {
-    if (!mounted) return;
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (r) => false);
   }
 
   Future<void> _checkLogin() async {
@@ -92,7 +133,7 @@ class _StartupState extends State<Startup> {
         return;
       }
 
-      // tenta refresh
+      // Provo il refresh token
       try {
         final newAuth = await _authService.refresh();
         await _storage.saveAccessToken(newAuth.accessToken);
@@ -111,7 +152,9 @@ class _StartupState extends State<Startup> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: Image.asset('assets/img/generic/splash.png')),
+      body: Center(
+        child: Image.asset('assets/img/generic/splash.png'),
+      ),
     );
   }
 }

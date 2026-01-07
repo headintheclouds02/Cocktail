@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:provider/provider.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
@@ -24,7 +25,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   void fetchCocktails() async {
-    final apiProvider = Provider.of<AuthApiProvider>(context, listen: false);
+    final apiProvider = Provider.of<CocktailProvider>(context, listen: false);
 
     try {
       final fetchedCocktails = await apiProvider.fetchCocktails();
