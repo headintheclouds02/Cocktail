@@ -137,7 +137,10 @@ class _StartupState extends State<Startup> {
       try {
         final newAuth = await _authService.refresh();
         await _storage.saveAccessToken(newAuth.accessToken);
-        await _storage.saveRefreshToken(newAuth.refreshToken);
+        if (newAuth.refreshToken.isNotEmpty) {
+          await _storage.saveRefreshToken(newAuth.refreshToken);
+        }
+
         Navigator.of(context).pushReplacementNamed('/main');
       } catch (_) {
         await _storage.clear();

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import '../model/auth_response.dart';
-import '../model/cocktail.dart';
-import '../service/api_client.dart';
 import '../service/auth_service.dart';
-import '../service/token_storage.dart';
 
 class AuthApiProvider extends ChangeNotifier {
   final AuthService authService;

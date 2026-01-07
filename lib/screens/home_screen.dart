@@ -56,6 +56,9 @@ class _State extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
 
+    // 🔥 CATEGORIE UNICHE
+    final uniqueCategories = cocktails.map((c) => c.category).toSet().toList();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView(
@@ -81,25 +84,26 @@ class _State extends State<HomeScreen> {
             style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
           ),
 
-          //CAROSELLO CARD COCKTAIL
+          //CAROSELLO CARD COCKTAIL (FIX DUPLICATI)
           SizedBox(
             height: 160,
             child: ListView.builder(
-              itemCount: cocktails.length,
+              itemCount: uniqueCategories.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
+                final category = uniqueCategories[index];
                 return CategoryCard(
                   image: Image.asset(
-                    CategoryImages.getImage(cocktails[index].category),
+                    CategoryImages.getImage(category),
                   ),
-                  color: CategoryColors.getColor(cocktails[index].category),
-                  text: cocktails[index].category,
+                  color: CategoryColors.getColor(category),
+                  text: category,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => CategoryScreen(
-                          category: cocktails[index].category,
+                          category: category,
                           cocktails: cocktails,
                         ),
                       ),

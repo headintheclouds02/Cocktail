@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../model/favorite.dart';
@@ -5,8 +8,8 @@ import '../service/api_client.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   final ApiClient api;
-  final void Function(String message)? _onShowMessage;
 
+  final void Function(String message)? _onShowMessage;
   List<Favorite> favorites = [];
   bool isLoading = false;
 
@@ -32,18 +35,24 @@ class FavoriteProvider extends ChangeNotifier {
 
   Future<void> toggleFavorite(int cocktailId) async {
     final isFav = favorites.any((f) => f.cocktail.id == cocktailId);
+    print(cocktailId);
     try {
       if (isFav) {
         await api.dio.delete('/api/favorites/$cocktailId');
+
         favorites.removeWhere((f) => f.cocktail.id == cocktailId);
         _onShowMessage?.call('Cocktail rimosso dai preferiti');
       } else {
         await api.dio.put('/api/favorites/toggle/$cocktailId');
-        await fetchFavorites(); // Ricarica la lista da backend per aggiornare lo stato
+
+        await fetchFavorites();
         _onShowMessage?.call('Cocktail aggiunto ai preferiti');
       }
       notifyListeners();
-    } catch (e) {
+    } catch (e, stacktrace) {
+      print('Errore toggleFavorite: $e');
+      print(stacktrace);
+
       rethrow;
     }
   }

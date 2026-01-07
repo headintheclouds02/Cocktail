@@ -56,7 +56,11 @@ class AuthService {
       final body = jsonDecode(res.body);
       final auth = AuthResponse.fromJson(body);
       await storage.saveAccessToken(auth.accessToken);
-      await storage.saveRefreshToken(auth.refreshToken);
+
+      if (auth.refreshToken.isNotEmpty) {
+        await storage.saveRefreshToken(auth.refreshToken);
+      }
+
       return auth;
     } else {
       throw Exception('Refresh failed: ${res.statusCode} ${res.body}');
