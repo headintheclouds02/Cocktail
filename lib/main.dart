@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/providers/auth_api_provider.dart';
+import 'package:flutter_cocktail/providers/save_provider.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/menu_screen.dart';
 import 'package:flutter_cocktail/service/auth_service.dart';
@@ -24,6 +25,9 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (_) => AuthApiProvider()),
+
+        ChangeNotifierProvider(create: (_) => SaveProvider()),
+
         // TODO: implements other providers here
       ],
       child: MyApp(scaffoldMessengerKey: scaffoldMessengerKey),

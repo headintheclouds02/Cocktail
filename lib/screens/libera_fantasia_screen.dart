@@ -6,6 +6,9 @@ import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
 import '../theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import '../providers/save_provider.dart';
+
 
 class LiberaFantasiaScreen extends StatefulWidget {
   final String title;
@@ -17,7 +20,13 @@ class LiberaFantasiaScreen extends StatefulWidget {
 }
 
 class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
-  final String title = 'Libera Fantasia';
+  final String title = 'Libera la Fantasia';
+  late String nomeCocktail = '';
+  late String descrizione = '';
+  late String categoria = '';
+  late String procedimento = '';
+  late String tipoBicchiere = '';
+  late List<String> ingredienti = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +52,9 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: InputFieldCustom(
                 hintText: ('Scegli il tuo nome'),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  nomeCocktail = value;
+                },
                 hideText: false,
                 icon: null,
               ),
@@ -72,7 +83,9 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 maxLines: 5,
                 minLines: 3,
                 hintText: ('Scrivi una breve decrizione...'),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  descrizione = value;
+                },
                 icon: SvgPicture.asset(
                   'assets/img/icone/search.svg',
                   width: 20,
@@ -95,7 +108,9 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 maxLines: 5,
                 minLines: 3,
                 hintText: ('Come ottieni questo cocktail...'),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  procedimento = value;
+                },
                 icon: SvgPicture.asset(
                   'assets/img/icone/search.svg',
                   width: 20,
@@ -118,7 +133,9 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 maxLines: 1,
                 minLines: 1,
                 hintText: ('Nome bicchiere...'),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  tipoBicchiere = value;
+                },
                 icon: SvgPicture.asset(
                   'assets/img/icone/search.svg',
                   width: 20,
@@ -142,8 +159,27 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: CustomButton(
                 text: 'Salva Cocktail',
-                onPressed: () {
-                  //TODO: SALVATAGGIO COCKTAIL
+                onPressed: () async {
+                  final payload = {
+                    'name': nomeCocktail,
+                    'description': descrizione,
+                    'category': categoria,
+                    'procedure': procedimento,
+                    'glassType': tipoBicchiere,
+                    'ingredients': ingredienti,
+                  };
+
+                  try {
+                    await context.read<SaveProvider>().createCocktail(payload);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Cocktail creato con successo')),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Errore nel salvataggio')),
+                    );
+                  }
                 },
               ),
             ),
