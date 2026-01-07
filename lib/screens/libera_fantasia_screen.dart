@@ -3,7 +3,6 @@ import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:flutter_cocktail/components/input_field_custom.dart';
 import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
-import 'package:flutter_cocktail/model/ingredient.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
 import '../model/ingredient_entry.dart';
@@ -28,7 +27,7 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
   late String categoria = '';
   late String procedimento = '';
   late String tipoBicchiere = '';
-  late String immagine = '';
+  late String immagine;
   late List<IngredientEntry> ingredienti = [];
 
   @override
