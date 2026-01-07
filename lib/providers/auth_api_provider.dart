@@ -53,7 +53,6 @@ class AuthApiProvider with ChangeNotifier {
     await _storage.clear();
     _isLoggedIn = false;
     notifyListeners();
-    // Qui puoi aggiungere eventuale logica globale di navigazione o alert
   }
 
   Future<void> login(String username, String password) async {
