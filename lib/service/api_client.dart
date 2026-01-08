@@ -35,6 +35,7 @@ class ApiClient {
         onError: (error, handler) async {
           final status = error.response?.statusCode;
           if (status == 401) {
+
             if (_isRefreshing) {
               while (_isRefreshing) {
                 await Future.delayed(const Duration(milliseconds: 100));
@@ -91,12 +92,14 @@ class ApiClient {
 
               return handler.resolve(retryResp);
             } catch (e) {
-              await storage.clear();
-              if (onLogout != null) {
-                try {
-                  onLogout!();
-                } catch (_) {}
+              _isRefreshing = false;
+
+              // logout SOLO se il refresh token è davvero invalido
+              if (error.requestOptions.path.contains('/auth/refresh')) {
+                await storage.clear();
+                onLogout?.call();
               }
+
               return handler.next(error);
             } finally {
               _isRefreshing = false;
