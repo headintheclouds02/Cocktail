@@ -89,7 +89,7 @@ class CocktailCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     Transform.translate(
-                      offset: const Offset(-15, 5), // mantiene l'effetto spostamento
+                      offset: const Offset(-15, 5),
                       child: imageWidget,
                     ),
 

@@ -19,6 +19,7 @@ class MenuScreen extends StatelessWidget {
           child: Column(
             children: [
               //card con coktail
+              Spacer(),
               Stack(
                 alignment: Alignment.centerLeft,
                 children: [
