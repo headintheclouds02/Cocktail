@@ -35,7 +35,7 @@ class FavoriteProvider extends ChangeNotifier {
 
   Future<void> toggleFavorite(int cocktailId) async {
     final isFav = favorites.any((f) => f.cocktail.id == cocktailId);
-    print(cocktailId);
+
     try {
       if (isFav) {
         await api.dio.delete('/api/favorites/$cocktailId');

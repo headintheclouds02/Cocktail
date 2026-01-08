@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'cocktail_ingredient.dart';
 
 class CreateCocktail {
@@ -8,8 +9,10 @@ class CreateCocktail {
   final String category;
   final String glassType;
   final String preparationMethod;
-  final Image image;
   final bool alcoholic;
+
+  /// URL restituito da POST /api/images/upload
+  final String? imageUrl;
 
   CreateCocktail({
     required this.name,
@@ -18,39 +21,64 @@ class CreateCocktail {
     required this.category,
     required this.glassType,
     required this.preparationMethod,
-    required this.image,
     required this.alcoholic,
+    this.imageUrl,
   });
-
-  factory CreateCocktail.fromJson(Map<String, dynamic> json) {
-    return CreateCocktail(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      cocktailIngredients: (json['cocktailIngredients'] as List<dynamic>?)
-          ?.map((item) => CocktailIngredient.fromJson(item))
-          .toList() ??
-          [],
-      category: json['category'] ?? '',
-      glassType: json['glassType'] ?? '',
-      preparationMethod: json['preparationMethod'] ?? '',
-      image: json['imageUrl'],
-      alcoholic: json['alcoholic'] ?? true,
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'description': description,
-      'cocktailIngredients':
-      cocktailIngredients.map((item) => item.toJson()).toList(),
+      'ingredients': cocktailIngredients.map((cocktailIng) {
+        final ingr = cocktailIng.ingredient;
+        return {
+          'name': ingr.name,
+          'quantity': cocktailIng.quantity,
+          'category': ingr.category,
+          'unit': ingr.unit,
+        };
+      }).toList(),
       'category': category,
       'glassType': glassType,
       'preparationMethod': preparationMethod,
-      'imageUrl': image,
       'alcoholic': alcoholic,
+      if (imageUrl != null) 'imageUrl': imageUrl,
     };
   }
 
+  Future<Response> create(
+      Dio dio, {
+        String path = '/api/cocktails',
+      }) {
+    return dio.post(path, data: toJson());
+  }
 
+  /// Upload dell’immagine e ritorno dell’URL
+  static Future<String> uploadImage(
+      Dio dio,
+      File imageFile, {
+        String path = '/api/images/upload',
+      }) async {
+    if (!await imageFile.exists()) {
+      throw Exception('File immagine non trovato: ${imageFile.path}');
+    }
+
+    final filename = imageFile.path.split(Platform.pathSeparator).last;
+
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        imageFile.path,
+        filename: filename,
+      ),
+    });
+
+    final response = await dio.post(path, data: formData);
+
+    final data = response.data;
+    if (data == null || data['url'] == null) {
+      throw Exception('Upload immagine fallito: risposta non valida');
+    }
+
+    return data['url'] as String;
+  }
 }

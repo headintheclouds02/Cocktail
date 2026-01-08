@@ -1,30 +1,55 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import '../service/api_client.dart';
-import '../service/auth_service.dart';
-import '../service/token_storage.dart';
+import '../model/create_cocktail.dart';
 
 class SaveProvider extends ChangeNotifier {
   final ApiClient api;
-
   bool isLoading = false;
 
   SaveProvider({required this.api});
 
-  Future<void> createCocktail(Map<String, dynamic> payload) async {
+  Dio get dio => api.dio;
+
+  Future<void> saveCocktail(
+      CreateCocktail model, {
+        File? imageFile,
+      }) async {
     isLoading = true;
     notifyListeners();
 
     try {
-      await api.dio.post('/api/cocktails', data: payload);
+      String? imageUrl;
 
-    } catch(e) {
-      print("------------ $e");
+      // 1️⃣ upload immagine se presente
+      if (imageFile != null) {
+        imageUrl = await CreateCocktail.uploadImage(
+          api.dio,
+          imageFile,
+        );
+      }
+
+
+      final cocktailWithImage = CreateCocktail(
+        name: model.name,
+        description: model.description,
+        cocktailIngredients: model.cocktailIngredients,
+        category: model.category,
+        glassType: model.glassType,
+        preparationMethod: model.preparationMethod,
+        alcoholic: model.alcoholic,
+        imageUrl: imageUrl,
+      );
+
+
+      await cocktailWithImage.create(api.dio);
+    } catch (e, st) {
+      debugPrint('saveCocktail error: $e\n$st');
+      rethrow;
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 }
-
-
