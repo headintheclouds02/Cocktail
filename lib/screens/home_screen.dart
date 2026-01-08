@@ -59,7 +59,8 @@ class _State extends State<HomeScreen> {
     final uniqueCategories = cocktails.map((c) => c.category).toSet().toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+
       child: ListView(
         children: [
           //TEXT "CATEGORIES"
@@ -120,7 +121,7 @@ class _State extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CocktailCard(
-                  // Se il cocktail ha un'immagine da URL, la uso, altrimenti uso quella statica
+
                   imageUrl: (cocktails[index].imageUrl != null && cocktails[index].imageUrl!.isNotEmpty)
                       ? baseUrl + cocktails[index].imageUrl!
                       : null,
@@ -139,6 +140,7 @@ class _State extends State<HomeScreen> {
               },
             ),
           ),
+
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:provider/provider.dart';
 import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
-import '../providers/auth_api_provider.dart';
 import '../providers/favorite_provider.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
@@ -46,6 +45,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final baseUrl = 'http://10.0.2.2:8081';
+
 
     return GridView.count(
       crossAxisCount: 2,
@@ -56,7 +57,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
       mainAxisSpacing: 10,
       children: List.generate(cocktails.length, (index) {
         return CocktailCard(
-          image: Image.asset(CocktailImages.getImage(cocktails[index].name)),
+          imageUrl: (cocktails[index].imageUrl != null && cocktails[index].imageUrl!.isNotEmpty)
+              ? baseUrl + cocktails[index].imageUrl!
+              : null,
+          image: (cocktails[index].imageUrl == null || cocktails[index].imageUrl!.isEmpty)
+              ? Image.asset(CocktailImages.getImage(cocktails[index].name))
+              : null,
           color: CocktailColors.getColor(cocktails[index].name),
           text: cocktails[index].name,
           description: cocktails[index].description,

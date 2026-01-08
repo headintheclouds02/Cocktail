@@ -48,6 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final baseUrl = 'http://10.0.2.2:8081';
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -70,9 +72,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CocktailCard(
-                  image: Image.asset(
-                    CocktailImages.getImage(createdCocktails[index].name),
-                  ),
+                  imageUrl: (createdCocktails[index].imageUrl != null && createdCocktails[index].imageUrl!.isNotEmpty)
+                      ? baseUrl + createdCocktails[index].imageUrl!
+                      : null,
+                  image: (createdCocktails[index].imageUrl == null || createdCocktails[index].imageUrl!.isEmpty)
+                      ? Image.asset(CocktailImages.getImage(createdCocktails[index].name))
+                      : null,
                   color: CocktailColors.getColor(createdCocktails[index].name),
                   text: createdCocktails[index].name,
                   description: createdCocktails[index].description,
