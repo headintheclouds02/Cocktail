@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:flutter_cocktail/components/input_field_custom.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
+import '../model/create_cocktail.dart';
+import '../model/ingredient_entry.dart';
 import '../theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/save_provider.dart';
@@ -21,12 +24,13 @@ class LiberaFantasiaScreen extends StatefulWidget {
 
 class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
   final String title = 'Libera la Fantasia';
-  late String nomeCocktail = '';
-  late String descrizione = '';
-  late String categoria = '';
-  late String procedimento = '';
-  late String tipoBicchiere = '';
-  late List<String> ingredienti = [];
+  String nomeCocktail = '';
+  String descrizione = '';
+  String categoria = '';
+  String procedimento = '';
+  String tipoBicchiere = '';
+  List<IngredientEntry> ingredienti = [];
+  File? selectedImageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,13 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               ),
             ),
 
-            ReminderList(),
+            ReminderList(
+              onChanged: (updatedList) {
+                setState(() {
+                  ingredienti = updatedList;
+                });
+              },
+            ),
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -153,31 +163,47 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               ),
             ),
 
-            CocktailImagePicker(),
+            CocktailImagePicker(
+              onImageSelected: (File? file) {
+                setState(() {
+                  selectedImageFile = file;
+                });
+              },
+            ),
 
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
               child: CustomButton(
                 text: 'Salva Cocktail',
                 onPressed: () async {
-                  final payload = {
-                    'name': nomeCocktail,
-                    'description': descrizione,
-                    'category': categoria,
-                    'procedure': procedimento,
-                    'glassType': tipoBicchiere,
-                    'ingredients': ingredienti,
-                  };
+                  final saveProvider = context.read<SaveProvider>();
+
+                  final model = CreateCocktail(
+                    name: nomeCocktail,
+                    description: descrizione,
+                    cocktailIngredients:
+                    ingredienti.map((e) => e.toCocktailIngredient()).toList(),
+                    category: 'Creato da me',
+                    glassType: tipoBicchiere,
+                    preparationMethod: procedimento,
+                    alcoholic: true,
+                  );
 
                   try {
-                    await context.read<SaveProvider>().createCocktail(payload);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cocktail creato con successo')),
+                    await saveProvider.saveCocktail(
+                      model,
+                      imageFile: selectedImageFile,
                     );
-                  } catch (e) {
+
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Errore nel salvataggio')),
+                      const SnackBar(content: Text('Cocktail salvato con successo')),
+                    );
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Errore salvataggio: $e')),
                     );
                   }
                 },

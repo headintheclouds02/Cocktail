@@ -11,6 +11,8 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final baseUrl = 'http://10.0.2.2:8081';
+
 
     if (favoriteProvider.isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -33,9 +35,12 @@ class FavoriteScreen extends StatelessWidget {
 
         return CocktailCard(
           cocktailId: favorite.cocktail.id,
-          image: Image.asset(
-            CocktailImages.getImage(favorite.cocktail.name),
-          ),
+          imageUrl: (favorite.cocktail.imageUrl != null && favorite.cocktail.imageUrl!.isNotEmpty)
+              ? baseUrl + favorite.cocktail.imageUrl!
+              : null,
+          image: (favorite.cocktail.imageUrl == null || favorite.cocktail.imageUrl!.isEmpty)
+              ? Image.asset(CocktailImages.getImage(favorite.cocktail.name))
+              : null,
           color: CocktailColors.getColor(favorite.cocktail.name),
           text: favorite.cocktail.name,
           description: favorite.cocktail.description,

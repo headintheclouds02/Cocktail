@@ -5,7 +5,8 @@ import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
 
 class CocktailCard extends StatelessWidget {
-  final Image image;
+  final Image? image;
+  final String? imageUrl;
   final Color color;
   final String text;
   final String description;
@@ -17,7 +18,8 @@ class CocktailCard extends StatelessWidget {
 
   const CocktailCard({
     super.key,
-    required this.image,
+    this.image,
+    this.imageUrl,
     required this.color,
     required this.text,
     required this.description,
@@ -33,6 +35,29 @@ class CocktailCard extends StatelessWidget {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
     final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
 
+    // Qui creiamo il widget immagine con dimensioni e allineamento fissi, sempre con lo stesso offset
+    Widget imageWidget;
+
+    if (image != null) {
+      imageWidget = image!;
+    } else if (imageUrl != null) {
+      imageWidget = Image.network(
+        imageUrl!,
+        width: 180,
+        height: 220,
+        fit: BoxFit.cover,
+        alignment: Alignment.bottomLeft,
+      );
+    } else {
+      imageWidget = Image.asset(
+        'assets/img/placeholder.png',
+        width: 180,
+        height: 220,
+        fit: BoxFit.cover,
+        alignment: Alignment.bottomLeft,
+      );
+    }
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -43,7 +68,7 @@ class CocktailCard extends StatelessWidget {
               name: text,
               description: description,
               ingredients: ingredients,
-              image: image,
+              image: imageWidget is Image ? imageWidget as Image : Image.asset('assets/img/placeholder.png'),
               preparationMethod: preparationMethod,
               glassType: glassType,
               isFavorite: currentIsFavorite,
@@ -65,10 +90,9 @@ class CocktailCard extends StatelessWidget {
                   children: [
                     Transform.translate(
                       offset: const Offset(-15, 5),
-                      child: image,
+                      child: imageWidget,
                     ),
 
-                    // Icona cuore con offset (-5, -15)
                     Positioned(
                       top: -5,
                       right: -5,
@@ -81,7 +105,6 @@ class CocktailCard extends StatelessWidget {
                         onPressed: () async {
                           try {
                             await favoriteProvider.toggleFavorite(cocktailId);
-
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Errore durante l\'aggiornamento dei preferiti')),

@@ -3,11 +3,11 @@ import 'package:flutter_cocktail/components/input_field_custom.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/registration_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_button.dart';
+import '../providers/auth_api_provider.dart';
 import '../theme/app_colors.dart';
-import '../service/auth_service.dart';
-import '../service/token_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,10 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordHidden = true;
-  final _tokenStorage = TokenStorage();
-  // baseUrl corretto: SOLO root del backend
-  late final _authService = AuthService(baseUrl: 'http://10.0.2.2:8081', storage: _tokenStorage);
-
   String _username = '';
   String _password = '';
 
@@ -130,8 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             return;
                           }
 
+                          final authProvider = context.read<AuthApiProvider>();  // <- qui
+
                           try {
-                            await _authService.login(_username, _password);
+                            await authProvider.login(_username, _password);       // <- e qui
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => MainPage()),
@@ -150,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           }
                         },
+
                       ),
                       Spacer(),
                       Text(

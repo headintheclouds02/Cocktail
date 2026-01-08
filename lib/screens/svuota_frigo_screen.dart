@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_cocktail/utils/ingredient_colors.dart';
 import 'package:flutter_cocktail/utils/ingredient_images.dart';
+import 'package:provider/provider.dart';
 import '../components/category_card.dart';
+import '../model/cocktail.dart';
 import '../model/ingredient.dart';
+import '../providers/cocktail_provider.dart';
+import 'ingredient_screen.dart';
 
 class SvuotaFrigoScreen extends StatefulWidget {
   final String title;
@@ -21,10 +25,33 @@ class _State extends State<SvuotaFrigoScreen> {
   String? selectedCategory;
   List<Ingredient> visibleIngredients = [];
 
+  List<Cocktail> cocktails = [];
+
+
   @override
   void initState() {
     super.initState();
     fetchIngredients();
+    fetchCocktails();
+  }
+
+  void fetchCocktails() async {
+    final apiProvider = Provider.of<CocktailProvider>(context, listen: false);
+
+    try {
+      final fetchedCocktails = await apiProvider.fetchCocktails();
+      setState(() {
+        cocktails = fetchedCocktails;
+      });
+    } catch (e) {
+      if (e.toString().contains('Session expired')) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Session expired, login.')),
+        );
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+      }
+    }
   }
 
   void selectCategory(String category) {
@@ -112,6 +139,17 @@ class _State extends State<SvuotaFrigoScreen> {
                           image: Image.asset(IngredientImages.getImage(ingredient.name)),
                           color:IngredientColors.getColor(ingredient.name),
                           text: ingredient.name,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => IngredientScreen(
+                                  ingredient: ingredient.name,
+                                  cocktails: cocktails,
+                                ),
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

@@ -18,8 +18,9 @@ class _CocktailImagePickerState extends State<CocktailImagePicker> {
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(
       source: source,
-      imageQuality: 80,
+      imageQuality: 50,
       maxWidth: 800,
+
     );
 
     if (pickedFile != null) {

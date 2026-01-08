@@ -1,53 +1,55 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import '../service/api_client.dart';
-import '../service/auth_service.dart';
-import '../service/token_storage.dart';
+import '../model/create_cocktail.dart';
 
 class SaveProvider extends ChangeNotifier {
-  final TokenStorage _storage;
-  final AuthService _authService;
-  final ApiClient _apiClient;
+  final ApiClient api;
+  bool isLoading = false;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  SaveProvider({required this.api});
 
-  SaveProvider({void Function(String message)? onShowMessage})
-      : _storage = TokenStorage(),
-        _authService = AuthService(
-          baseUrl: 'http://10.0.2.2:8081',
-          storage: TokenStorage(),
-        ),
-        _apiClient = ApiClient(
-          baseUrl: 'http://10.0.2.2:8081',
-          authService: AuthService(
-            baseUrl: 'http://10.0.2.2:8081',
-            storage: TokenStorage(),
-          ),
-          storage: TokenStorage(),
-        );
+  Dio get dio => api.dio;
 
-  Future<void> createCocktail(Map<String, dynamic> payload) async {
-    _isLoading = true;
+  Future<void> saveCocktail(
+      CreateCocktail model, {
+        File? imageFile,
+      }) async {
+    isLoading = true;
     notifyListeners();
 
     try {
-      final token = await _storage.getAccessToken();
-      if (token == null || token.isEmpty) {
-        throw Exception('Token non valido');
+      String? imageUrl;
+
+      // 1️⃣ upload immagine se presente
+      if (imageFile != null) {
+        imageUrl = await CreateCocktail.uploadImage(
+          api.dio,
+          imageFile,
+        );
       }
 
-      await _apiClient.dio.post(
-        '/api/cocktails',
-        data: payload,
+
+      final cocktailWithImage = CreateCocktail(
+        name: model.name,
+        description: model.description,
+        cocktailIngredients: model.cocktailIngredients,
+        category: model.category,
+        glassType: model.glassType,
+        preparationMethod: model.preparationMethod,
+        alcoholic: model.alcoholic,
+        imageUrl: imageUrl,
       );
-    } catch (e) {
-      debugPrint('Errore createCocktail: $e');
+
+
+      await cocktailWithImage.create(api.dio);
+    } catch (e, st) {
+      debugPrint('saveCocktail error: $e\n$st');
       rethrow;
     } finally {
-      _isLoading = false;
+      isLoading = false;
       notifyListeners();
     }
   }
 }
-
