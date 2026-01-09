@@ -34,8 +34,6 @@ class CocktailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
     final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
-
-    // Qui creiamo il widget immagine con dimensioni e allineamento fissi, sempre con lo stesso offset
     Widget imageWidget;
 
     if (image != null) {
@@ -68,7 +66,7 @@ class CocktailCard extends StatelessWidget {
               name: text,
               description: description,
               ingredients: ingredients,
-              image: imageWidget is Image ? imageWidget as Image : Image.asset('assets/img/placeholder.png'),
+              image: imageWidget is Image ? imageWidget : Image.asset('assets/img/placeholder.png'),
               preparationMethod: preparationMethod,
               glassType: glassType,
               isFavorite: currentIsFavorite,
@@ -92,7 +90,6 @@ class CocktailCard extends StatelessWidget {
                       offset: const Offset(-15, 5),
                       child: imageWidget,
                     ),
-
                     Positioned(
                       top: -5,
                       right: -5,

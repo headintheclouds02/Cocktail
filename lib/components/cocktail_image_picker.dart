@@ -20,7 +20,6 @@ class _CocktailImagePickerState extends State<CocktailImagePicker> {
       source: source,
       imageQuality: 50,
       maxWidth: 800,
-
     );
 
     if (pickedFile != null) {
@@ -45,15 +44,19 @@ class _CocktailImagePickerState extends State<CocktailImagePicker> {
               borderRadius: BorderRadius.circular(12),
               image: _image != null
                   ? DecorationImage(
-                image: FileImage(_image!),
-                fit: BoxFit.cover,
-              )
+                      image: FileImage(_image!),
+                      fit: BoxFit.cover,
+                    )
                   : null,
             ),
             child: _image == null
                 ? const Center(
-              child: Icon(Icons.camera_alt, size: 48, color: Colors.white),
-            )
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: 48,
+                      color: Colors.white,
+                    ),
+                  )
                 : null,
           ),
         ),

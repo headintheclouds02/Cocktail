@@ -5,7 +5,12 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final String image;
 
-  const CustomAppBar({super.key, this.enableBackPress = false, required this.title, required this.image});
+  const CustomAppBar({
+    super.key,
+    this.enableBackPress = false,
+    required this.title,
+    required this.image,
+  });
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
@@ -15,7 +20,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,9 +45,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     child: SizedBox(
                       width: 45,
                       height: 45,
-                      child: Image.asset(
-                        widget.image,
-                      ),
+                      child: Image.asset(widget.image),
                     ),
                   ),
                   Padding(
