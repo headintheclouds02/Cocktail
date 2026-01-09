@@ -17,21 +17,21 @@ class IngredientEntry {
     this.description = '',
   });
 }
-extension IngredientEntryMapper on IngredientEntry{
+extension IngredientEntryMapper on IngredientEntry {
 
   CocktailIngredient toCocktailIngredient() {
     final ingr = Ingredient(
       id: 0,
-      name: name,
+      name: name.trim(),
       category: category,
-      unit: unit,
+      unit: "",
       description: description.isEmpty ? null : description,
     );
 
     return CocktailIngredient(
       id: 0,
       ingredient: ingr,
-      quantity: quantity,
+      quantity: '${quantity.trim()} $unit',
     );
   }
 }
