@@ -92,7 +92,7 @@ class _State extends State<HomeScreen> {
             controller: searchController,
             hintText: 'Cerca un cocktail',
             icon: SvgPicture.asset(
-              'assets/icons/search.svg',
+              'assets/img/icone/search.svg',
               color:
                 AppColors.fieldText,
             ),

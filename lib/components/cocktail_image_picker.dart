@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../theme/app_colors.dart';
+
 class CocktailImagePicker extends StatefulWidget {
   final Function(File image)? onImageSelected;
 
@@ -40,7 +42,7 @@ class _CocktailImagePickerState extends State<CocktailImagePicker> {
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: AppColors.image,
               borderRadius: BorderRadius.circular(12),
               image: _image != null
                   ? DecorationImage(
@@ -64,14 +66,14 @@ class _CocktailImagePickerState extends State<CocktailImagePicker> {
         Row(
           children: [
             TextButton.icon(
-              icon: const Icon(Icons.photo_library),
-              label: const Text("Galleria"),
+              icon: const Icon(Icons.photo_library, color: AppColors.tapBarBackground),
+              label: const Text("Galleria",  style: TextStyle(color: AppColors.tapBarBackground)),
               onPressed: () => _pickImage(ImageSource.gallery),
             ),
             const SizedBox(width: 16),
             TextButton.icon(
-              icon: const Icon(Icons.camera_alt),
-              label: const Text("Fotocamera"),
+              icon: const Icon(Icons.camera_alt, color: AppColors.tapBarBackground),
+              label: const Text("Fotocamera", style: TextStyle(color: AppColors.tapBarBackground)),
               onPressed: () => _pickImage(ImageSource.camera),
             ),
           ],

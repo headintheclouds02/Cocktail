@@ -46,14 +46,15 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 32),
               child: Text(
                 "Dai un nome al tuo cocktail",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
+
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: InputFieldCustom(
                 hintText: ('Scegli il tuo nome'),
                 onChanged: (value) {
@@ -65,10 +66,10 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 48),
               child: Text(
                 "Scegli i tuoi ingredienti",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
 
@@ -81,14 +82,14 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 48),
               child: Text(
                 "Aggiungi una descrizione",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: TextFieldCustom(
                 maxLines: 5,
                 minLines: 3,
@@ -106,14 +107,14 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 48),
               child: Text(
                 "Procedimento",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: TextFieldCustom(
                 maxLines: 5,
                 minLines: 3,
@@ -131,14 +132,14 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 48),
               child: Text(
                 "Che tipo di bicchiere serve?",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: TextFieldCustom(
                 maxLines: 1,
                 minLines: 1,
@@ -156,19 +157,22 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.only(top: 48),
               child: Text(
-                "Immagini",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
+                "Immagine",
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
 
-            CocktailImagePicker(
-              onImageSelected: (File? file) {
-                setState(() {
-                  selectedImageFile = file;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              child: CocktailImagePicker(
+                onImageSelected: (File? file) {
+                  setState(() {
+                    selectedImageFile = file;
+                  });
+                },
+              ),
             ),
 
             Padding(
