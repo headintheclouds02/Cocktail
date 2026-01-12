@@ -14,79 +14,83 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'Bevo, quindi sono', image: 'assets/img/generic/logo_pnk_nobg.png',),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              //card con coktail
-              Spacer(),
-              Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    width: 280,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      color: AppColors.tapBarBackground,
-                      borderRadius: BorderRadius.circular(80),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              children: [
+                const SizedBox(height: 64),
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      width: 280,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: AppColors.tapBarBackground,
+                        borderRadius: BorderRadius.circular(80),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Image.asset("assets/img/generic/menu.png", height: 400),
-                ],
-              ),
-
-              Spacer(),
-
-              Text(
-                "Prepara i tuoi cocktail con stile",
-                style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
-                textAlign: TextAlign.center,
-              ),
-
-              Spacer(),
-
-              CustomButton(
-                text: "Login",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-              ),
-
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegistrationScreen(),
+                    Image.asset(
+                      "assets/img/generic/menu.png",
+                      height: 300,
                     ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    "o crea un account",
-                    style: TextStyle(
-                      fontFamily: 'Gabarito',
-                      fontSize: 20,
-                      color: AppColors.buttonEnabled,
-                      decoration: TextDecoration.underline,
+                  ],
+                ),
+
+                const SizedBox(height: 32),
+
+                Text(
+                  "Prepara i tuoi cocktail con stile",
+                  style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: 32),
+
+                CustomButton(
+                  text: "Login",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => LoginScreen()),
+                    );
+                  },
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RegistrationScreen(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      "o crea un account",
+                      style: TextStyle(
+                        fontFamily: 'Gabarito',
+                        fontSize: 20,
+                        color: AppColors.buttonEnabled,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              Spacer(),
-            ],
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),
