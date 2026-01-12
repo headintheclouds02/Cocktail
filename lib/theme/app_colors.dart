@@ -28,6 +28,10 @@ class AppColors {
   static const rumB = Color(0xFFAAB0A2);
   static const triple = Color(0xFFB78A76);
   static const vermouth = Color(0xFF938076);
+  static const angelo = Color(0xFFC2D1D9);
+  static const altro = Color(0xFFEAC8B2);
+
+
 
   static const bloody = Color(0xFFDB8573);
   static const margarita = Color(0xFFC9CCA4);

@@ -31,18 +31,24 @@ class CocktailProvider extends ChangeNotifier {
       throw Exception('Session expired');
     }
 
-    final response = await apiClient.dio.get('/api/public/cocktails');
+    try {
+      final response =
+      await apiClient.dio.get('/api/user/cocktails');
 
-    _cocktails = (response.data['content'] as List)
-        .map((e) => Cocktail.fromJson(e))
-        .toList();
+      _cocktails = (response.data['content'] as List)
+          .map((e) => Cocktail.fromJson(e))
+          .toList();
 
-    _loaded = true;
-    isLoading = false;
-    notifyListeners();
+      _loaded = true;
+    } catch (e) {
+      debugPrint('fetchCocktails error → $e');
+      rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   List<String> get categories =>
       _cocktails.map((c) => c.category).toSet().toList()..sort();
 }
-

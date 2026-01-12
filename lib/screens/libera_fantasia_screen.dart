@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
 import '../model/create_cocktail.dart';
 import '../model/ingredient_entry.dart';
+import '../providers/cocktail_provider.dart';
 import '../theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/save_provider.dart';
@@ -26,11 +27,13 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
   final String title = 'Libera la Fantasia';
   String nomeCocktail = '';
   String descrizione = '';
-  String categoria = '';
   String procedimento = '';
   String tipoBicchiere = '';
   List<IngredientEntry> ingredienti = [];
   File? selectedImageFile;
+
+  String selectedCategory = 'Altro';
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +135,52 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
             ),
 
             Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Text(
+                'Categoria',
+                style: TextStyle(
+                  fontFamily: 'Gabarito',
+                  fontSize: 22,
+                ),
+              ),
+            ),
+
+            Consumer<CocktailProvider>(
+              builder: (context, provider, _) {
+                final categories = provider.categories;
+
+                if (categories.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text('Nessuna categoria disponibile'),
+                  );
+                }
+
+                return Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: categories.map((category) {
+                    final isSelected = selectedCategory == category;
+
+                    return ChoiceChip(
+                      selectedColor: AppColors.tapBarBackground,
+                      label: Text(
+                          category,
+                          style: isSelected ? TextStyle(color: Colors.white, fontFamily: 'Gabarito', fontSize: 18) : TextStyle(color: AppColors.tapBarBackground, fontFamily: 'Gabarito', fontSize: 18)),
+                      selected: isSelected,
+                      onSelected: (_) {
+                        setState(() {
+                          selectedCategory = category;
+                        });
+                      },
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+
+
+            Padding(
               padding: const EdgeInsets.only(top: 48),
               child: Text(
                 "Che tipo di bicchiere serve?",
@@ -187,11 +236,19 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     description: descrizione,
                     cocktailIngredients:
                     ingredienti.map((e) => e.toCocktailIngredient()).toList(),
-                    category: 'Creato da me',
+                    category: selectedCategory,
                     glassType: tipoBicchiere,
                     preparationMethod: procedimento,
                     alcoholic: true,
                   );
+
+                  if (selectedCategory == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Seleziona una categoria')),
+                    );
+                    return;
+                  }
+
 
                   try {
                     await saveProvider.saveCocktail(
@@ -203,6 +260,10 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Cocktail salvato con successo')),
                     );
+                    await context
+                        .read<CocktailProvider>()
+                        .fetchCocktails(forceRefresh: true);
+
                     Navigator.of(context).pop();
                   } catch (e) {
                     if (!mounted) return;

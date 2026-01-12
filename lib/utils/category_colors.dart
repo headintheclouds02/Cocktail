@@ -8,6 +8,7 @@ class CategoryColors {
     'Gin': AppColors.gin,
     'Rum': AppColors.rumB,
     'Tequila': AppColors.tequila,
+    'Altro' : AppColors.altro
   };
 
   static Color getColor(String cocktailName) {

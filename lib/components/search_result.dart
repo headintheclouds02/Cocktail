@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../model/cocktail.dart';
 import '../providers/favorite_provider.dart';
 import '../screens/detail_screen.dart';
@@ -16,29 +15,29 @@ class SearchResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double itemHeight = 56;
-    const double maxHeight = 250;
-
-    final height = (cocktails.length * itemHeight)
-        .clamp(0, maxHeight)
-        .toDouble();
+    const baseUrl = 'http://10.0.2.2:8081';
 
     return SizedBox(
-      height: height,
+      height: (cocktails.length * 56).clamp(0, 250).toDouble(),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(blurRadius: 10, color: Colors.black12),
-          ],
+          boxShadow: const [BoxShadow(blurRadius: 10, color: Colors.black12)],
         ),
         child: ListView.separated(
-          shrinkWrap: true,
           itemCount: cocktails.length,
           separatorBuilder: (_, __) => const Divider(height: 1),
           itemBuilder: (context, index) {
             final cocktail = cocktails[index];
+
+            final Image image =
+                cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
+                ? Image.network(baseUrl + cocktail.imageUrl!, fit: BoxFit.cover)
+                : Image.asset(
+                    CocktailImages.getImage(cocktail.name),
+                    fit: BoxFit.cover,
+                  );
 
             return ListTile(
               title: Text(cocktail.name),
@@ -53,12 +52,9 @@ class SearchResults extends StatelessWidget {
                       ingredients: cocktail.cocktailIngredients,
                       preparationMethod: cocktail.preparationMethod,
                       glassType: cocktail.glassType,
-                      image: Image.asset(
-                        CocktailImages.getImage(cocktail.name),
-                      ),
+                      image: image,
                       cocktailId: cocktail.id,
-                      isFavorite:
-                      favoriteProvider.isFavorite(cocktail.id),
+                      isFavorite: favoriteProvider.isFavorite(cocktail.id),
                     ),
                   ),
                 );
@@ -70,4 +66,3 @@ class SearchResults extends StatelessWidget {
     );
   }
 }
-

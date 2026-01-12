@@ -9,6 +9,7 @@ class CategoryImages {
     'Gin': '$_basePath2/gin.png',
     'Rum': '$_basePath2/rumbianco.png',
     'Tequila': '$_basePath2/tequila.png',
+    'Altro' : 'assets/img/generic/altro.png'
   };
 
   static String getImage(String cocktailName) {

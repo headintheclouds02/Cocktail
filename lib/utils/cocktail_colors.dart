@@ -9,6 +9,7 @@ class CocktailColors {
     'Aperol Spritz': AppColors.aperol,
     'Margarita': AppColors.margarita,
     'Bloody Mary': AppColors.bloody,
+    'Angelo Azzurro': AppColors.angelo
   };
 
   static Color getColor(String cocktailName) {
