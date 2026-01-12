@@ -57,4 +57,12 @@ class FavoriteProvider extends ChangeNotifier {
   bool isFavorite(int cocktailId) {
     return favorites.any((f) => f.cocktail.id == cocktailId);
   }
+
+
+
+  void clear() {
+  favorites.clear();
+  notifyListeners();
+  }
+
 }

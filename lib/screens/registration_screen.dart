@@ -45,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
       body: Stack(
         children: [
-          // Background
+          //background image
           Positioned(
             bottom: 0,
             right: -55,

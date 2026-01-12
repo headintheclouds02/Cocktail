@@ -24,9 +24,11 @@ class DetailScreen extends StatefulWidget {
     required this.isFavorite,
     required this.cocktailId,
   });
+
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
+
 class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
@@ -34,7 +36,10 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   void _toggleFavorite() async {
-    final favoriteProvider = Provider.of<FavoriteProvider>(context, listen: false);
+    final favoriteProvider = Provider.of<FavoriteProvider>(
+      context,
+      listen: false,
+    );
 
     try {
       await favoriteProvider.toggleFavorite(widget.cocktailId);
@@ -72,7 +77,17 @@ class _DetailScreenState extends State<DetailScreen> {
           //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             //IMMAGINE
-            SizedBox(width: 400, height: 400, child: widget.image),
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 350,
+                maxWidth: double.infinity,
+              ),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: widget.image,
+              ),
+            ),
+
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
 
@@ -173,4 +188,3 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
-

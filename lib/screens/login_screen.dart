@@ -32,46 +32,45 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Stack(
         children: [
+          //background image
           Positioned(
             bottom: 0,
             right: -55,
             child: Image.asset("assets/img/generic/login.png", height: 500),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 80),
-            child: Stack(
-              children: [
-                Container(
+
+          //foreground card
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(32),
+                child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  constraints: const BoxConstraints(),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
                     color: AppColors.iconUnfocused.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(25),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Spacer(),
                       Text(
                         "Login",
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
                       ),
-                      Spacer(),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            "Username",
-                            style: TextStyle(
-                              fontFamily: 'Gabarito',
-                              fontSize: 20,
-                            ),
-                          ),
+                      SizedBox(height: 24),
+
+                      //nome
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          "Username",
+                          style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
                         ),
                       ),
+
                       InputFieldCustom(
                         onChanged: (String value) {
                           _username = value.trim();
@@ -80,17 +79,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         icon: SvgPicture.asset("assets/img/generic/user.svg"),
                         hideText: false,
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            "Password",
-                            style: TextStyle(
-                              fontFamily: 'Gabarito',
-                              fontSize: 20,
-                            ),
-                          ),
+
+
+                      //cognome
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          "Password",
+                          style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
                         ),
                       ),
                       InputFieldCustom(
@@ -115,7 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      Spacer(),
+
+                      SizedBox(height: 32),
+
                       CustomButton(
                         text: "Mixiamo!",
                         onPressed: () async {
@@ -148,11 +146,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           }
                         },
-
                       ),
-                      Spacer(),
+
+                      SizedBox(height: 16),
+
                       Text(
                         'Prima volta al bancone?',
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontFamily: 'Gabarito', fontSize: 20),
                       ),
                       TextButton(
@@ -164,24 +164,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Text(
-                            "Unisciti a noi",
-                            style: TextStyle(
-                              fontFamily: 'Gabarito',
-                              fontSize: 20,
-                              color: AppColors.buttonEnabled,
-                              decoration: TextDecoration.underline,
-                            ),
+                        child: Text(
+                          "Unisciti a noi",
+                          style: TextStyle(
+                            fontFamily: 'Gabarito',
+                            fontSize: 18,
+                            color: AppColors.buttonEnabled,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ),
-                      Spacer(),
                     ],
                   ),
                 ),
-              ],
             ),
           ),
         ],

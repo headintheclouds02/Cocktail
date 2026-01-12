@@ -51,4 +51,9 @@ class CocktailProvider extends ChangeNotifier {
 
   List<String> get categories =>
       _cocktails.map((c) => c.category).toSet().toList()..sort();
+
+  void clear() {
+    cocktails.clear();
+    notifyListeners();
+  }
 }

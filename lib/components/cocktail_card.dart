@@ -85,6 +85,7 @@ class CocktailCard extends StatelessWidget {
                 width: 130,
                 height: 180,
                 child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Transform.translate(
                       offset: const Offset(-15, 5),

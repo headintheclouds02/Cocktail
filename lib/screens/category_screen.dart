@@ -22,7 +22,6 @@ class CategoryScreen extends StatelessWidget {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
     const baseUrl = 'http://10.0.2.2:8081';
 
-
     return Scaffold(
       appBar: AppBar(
         title: Text(category, style: TextStyle(fontFamily: 'Gabarito', fontSize: 32)),
@@ -38,20 +37,27 @@ class CategoryScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: filteredCocktails.length,
-              itemBuilder: (context, index) {
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 4,
+              padding: const EdgeInsets.all(10),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children: List.generate(filteredCocktails.length, (index) {
                 final cocktail = filteredCocktails[index];
+
                 final Image image =
                 cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
-                    ? Image.network(baseUrl + cocktail.imageUrl!, fit: BoxFit.cover)
+                    ? Image.network(
+                  baseUrl + cocktail.imageUrl!,
+                  fit: BoxFit.cover,
+                )
                     : Image.asset(
                   CocktailImages.getImage(cocktail.name),
                   fit: BoxFit.cover,
                 );
 
                 return CocktailCard(
-
                   image: image,
                   color: CocktailColors.getColor(cocktail.name),
                   text: cocktail.name,
@@ -62,9 +68,10 @@ class CategoryScreen extends StatelessWidget {
                   isFavorite: favoriteProvider.isFavorite(cocktail.id),
                   cocktailId: cocktail.id,
                 );
-              },
+              }),
             ),
           ),
+
         ]
       ),
     );

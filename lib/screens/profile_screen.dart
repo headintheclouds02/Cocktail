@@ -3,6 +3,7 @@ import 'package:flutter_cocktail/components/cocktail_card.dart';
 import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:provider/provider.dart';
 import '../model/cocktail.dart';
+import '../providers/auth_api_provider.dart';
 import '../providers/cocktail_provider.dart';
 import '../providers/favorite_provider.dart';
 import '../utils/cocktail_colors.dart';
@@ -45,11 +46,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: CustomButton(
               text: 'Logout',
-              onPressed: () {
+              onPressed: () async {
+                final authProvider =
+                Provider.of<AuthApiProvider>(context, listen: false);
+                final favoriteProvider =
+                Provider.of<FavoriteProvider>(context, listen: false);
+                final cocktailProvider =
+                Provider.of<CocktailProvider>(context, listen: false);
+
+                // 1. Logout reale
+                await authProvider.logout();
+
+                // 2. Reset stato locale
+                favoriteProvider.clear();
+                cocktailProvider.clear();
+
+                // 3. Navigazione pulita
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MenuScreen()),
-                  (route) => false,
+                  MaterialPageRoute(builder: (_) => const MenuScreen()),
+                      (_) => false,
                 );
               },
             ),
