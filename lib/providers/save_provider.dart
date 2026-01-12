@@ -21,8 +21,6 @@ class SaveProvider extends ChangeNotifier {
 
     try {
       String? imageUrl;
-
-      // 1️⃣ upload immagine se presente
       if (imageFile != null) {
         imageUrl = await CreateCocktail.uploadImage(
           api.dio,

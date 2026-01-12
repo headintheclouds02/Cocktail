@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/providers/auth_api_provider.dart';
 import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:flutter_cocktail/providers/save_provider.dart';
+import 'package:flutter_cocktail/providers/theme_provider.dart';
 import 'package:flutter_cocktail/screens/main_page.dart';
 import 'package:flutter_cocktail/screens/menu_screen.dart';
 import 'package:flutter_cocktail/service/api_client.dart';
@@ -37,6 +38,10 @@ void main() async {
         Provider.value(value: apiClient),
 
         ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
+
+        ChangeNotifierProvider(
           create: (ctx) => FavoriteProvider(
             api: ctx.read<ApiClient>(),
             onShowMessage: (msg) {
@@ -46,6 +51,7 @@ void main() async {
             },
           ),
         ),
+
         ChangeNotifierProvider(
           create: (ctx) => AuthApiProvider(
             authService: ctx.read<AuthService>(),
@@ -87,11 +93,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
+
     return MaterialApp(
       title: 'Flutter Demo',
       scaffoldMessengerKey: scaffoldMessengerKey,
       navigatorKey: navigatorKey,
       home: const Startup(),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeProvider.themeMode,
       routes: {
         '/login': (context) => MenuScreen(),
         '/main': (context) => const MainPage(),
@@ -114,7 +126,6 @@ class _StartupState extends State<Startup> {
   @override
   void initState() {
     super.initState();
-    // Prendo le istanze da Provider per evitare duplicati
     _storage = context.read<TokenStorage>();
     _authService = context.read<AuthService>();
     _checkLogin();

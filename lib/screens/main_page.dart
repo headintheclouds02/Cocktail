@@ -4,7 +4,9 @@ import 'package:flutter_cocktail/screens/explore_screen.dart';
 import 'package:flutter_cocktail/screens/add_screen.dart';
 import 'package:flutter_cocktail/screens/favorite_screen.dart';
 import 'package:flutter_cocktail/screens/profile_screen.dart';
+import 'package:provider/provider.dart';
 import '../components/custom_tapbar.dart';
+import '../providers/theme_provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -63,6 +65,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -70,6 +75,18 @@ class _MainPageState extends State<MainPage> {
           style: TextStyle(fontFamily: 'Gabarito', fontSize: 32),
         ),
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: Icon(
+              context.watch<ThemeProvider>().isDarkMode
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () {
+              context.read<ThemeProvider>().toggleTheme();
+            },
+          )
+        ],
       ),
       body: PageView(
         controller: _pageController,
