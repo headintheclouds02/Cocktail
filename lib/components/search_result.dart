@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../model/cocktail.dart';
 import '../providers/favorite_provider.dart';
 import '../screens/detail_screen.dart';
+import '../theme/app_colors.dart';
 import '../utils/cocktail_images.dart';
 
 class SearchResults extends StatelessWidget {
@@ -21,7 +22,7 @@ class SearchResults extends StatelessWidget {
       height: (cocktails.length * 56).clamp(0, 250).toDouble(),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.tapBarBackground,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [BoxShadow(blurRadius: 10, color: Colors.black12)],
         ),

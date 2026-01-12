@@ -66,123 +66,129 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final baseUrl = 'http://10.0.2.2:8081';
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-      child: cocktailProvider.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView(
-        children: [
-          CustomSearchBar(
-            controller: searchController,
-            hintText: 'Cerca un cocktail',
-            icon: SvgPicture.asset(
-              'assets/img/icone/search.svg',
-              color: AppColors.fieldText,
-            ),
-            onChanged: (value) =>
-                onSearchChanged(value, cocktails),
-          ),
-
-          const SizedBox(height: 16),
-
-          if (isSearching)
-            SearchResults(
-              cocktails: filteredCocktails,
-              favoriteProvider: favoriteProvider,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+        child: cocktailProvider.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+          children: [
+            CustomSearchBar(
+              controller: searchController,
+              hintText: 'Cerca un cocktail',
+              icon: SvgPicture.asset(
+                'assets/img/icone/search.svg',
+                color: AppColors.fieldText,
+              ),
+              onChanged: (value) =>
+                  onSearchChanged(value, cocktails),
             ),
 
-          if (isSearching && filteredCocktails.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Nessun cocktail trovato',
-                style: TextStyle(color: Colors.grey),
+            const SizedBox(height: 16),
+
+            if (isSearching)
+              SearchResults(
+                cocktails: filteredCocktails,
+                favoriteProvider: favoriteProvider,
+              ),
+
+            if (isSearching && filteredCocktails.isEmpty)
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  'Nessun cocktail trovato',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+
+            const SizedBox(height: 16),
+            const Text(
+              'Categorie',
+              style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
+            ),
+
+            SizedBox(
+              height: 160,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+
+                  return CategoryCard(
+                    image: Image.asset(
+                      CategoryImages.getImage(category),
+                    ),
+                    color: CategoryColors.getColor(category),
+                    text: category,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryScreen(
+                            category: category,
+                            cocktails: cocktails,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
 
-          const SizedBox(height: 16),
-          const Text(
-            'Categorie',
-            style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
-          ),
-
-          SizedBox(
-            height: 160,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-
-                return CategoryCard(
-                  image: Image.asset(
-                    CategoryImages.getImage(category),
-                  ),
-                  color: CategoryColors.getColor(category),
-                  text: category,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CategoryScreen(
-                          category: category,
-                          cocktails: cocktails,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              child: CustomButton(
+                text: 'Crea il tuo cocktail',
+                onPressed: () => widget.onChangePage(2),
+              ),
             ),
-          ),
 
-          Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: CustomButton(
-              text: 'Crea il tuo cocktail',
-              onPressed: () => widget.onChangePage(2),
+            const Text(
+              'Popolari',
+              style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
             ),
-          ),
 
-          const Text(
-            'Popolari',
-            style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
-          ),
+            SizedBox(
+              height: 250,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: cocktails.length,
+                itemBuilder: (context, index) {
+                  final cocktail = cocktails[index];
 
-          SizedBox(
-            height: 250,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: cocktails.length,
-              itemBuilder: (context, index) {
-                final cocktail = cocktails[index];
-
-                return CocktailCard(
-                  imageUrl:
-                  cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
-                      ? baseUrl + cocktail.imageUrl!
-                      : null,
-                  image:
-                  cocktail.imageUrl == null || cocktail.imageUrl!.isEmpty
-                      ? Image.asset(
-                    CocktailImages.getImage(cocktail.name),
-                  )
-                      : null,
-                  color: CocktailColors.getColor(cocktail.name),
-                  text: cocktail.name,
-                  description: cocktail.description,
-                  ingredients: cocktail.cocktailIngredients,
-                  preparationMethod: cocktail.preparationMethod,
-                  glassType: cocktail.glassType,
-                  isFavorite:
-                  favoriteProvider.isFavorite(cocktail.id),
-                  cocktailId: cocktail.id,
-                );
-              },
+                  return CocktailCard(
+                    imageUrl:
+                    cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
+                        ? baseUrl + cocktail.imageUrl!
+                        : null,
+                    image:
+                    cocktail.imageUrl == null || cocktail.imageUrl!.isEmpty
+                        ? Image.asset(
+                      CocktailImages.getImage(cocktail.name),
+                    )
+                        : null,
+                    color: CocktailColors.getColor(cocktail.name),
+                    text: cocktail.name,
+                    description: cocktail.description,
+                    ingredients: cocktail.cocktailIngredients,
+                    preparationMethod: cocktail.preparationMethod,
+                    glassType: cocktail.glassType,
+                    isFavorite:
+                    favoriteProvider.isFavorite(cocktail.id),
+                    cocktailId: cocktail.id,
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

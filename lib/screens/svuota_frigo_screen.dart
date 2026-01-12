@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../components/category_card.dart';
-import '../model/cocktail.dart';
-import '../model/ingredient.dart';
+import '../components/search_bar.dart';
+import '../components/search_ingredient_result.dart';
 
+import '../model/ingredient.dart';
 import '../providers/cocktail_provider.dart';
 
+import '../theme/app_colors.dart';
+import '../utils/category_colors.dart';
+import '../utils/category_images.dart';
 import '../utils/ingredient_colors.dart';
 import '../utils/ingredient_images.dart';
 
+import 'category_screen.dart';
 import 'ingredient_screen.dart';
 
 class SvuotaFrigoScreen extends StatefulWidget {
@@ -26,8 +32,10 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
   Map<String, List<Ingredient>> ingredientsByCategory = {};
   List<String> categories = [];
 
-  String? selectedCategory;
-  List<Ingredient> visibleIngredients = [];
+  bool isSearching = false;
+  List<Ingredient> filteredIngredients = [];
+
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -35,7 +43,18 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
     fetchIngredients();
   }
 
-  void fetchIngredients() async {
+  void onSearchChanged(String value, List<Ingredient> allIngredients) {
+    setState(() {
+      isSearching = value.trim().isNotEmpty;
+      filteredIngredients = allIngredients
+          .where(
+            (i) => i.name.toLowerCase().contains(value.toLowerCase()),
+      )
+          .toList();
+    });
+  }
+
+  Future<void> fetchIngredients() async {
     final dio = Dio();
 
     try {
@@ -55,28 +74,19 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
       setState(() {
         ingredientsByCategory = parsed;
         categories = parsed.keys.toList();
-
-        selectedCategory = categories.isNotEmpty ? categories.first : null;
-        visibleIngredients = selectedCategory != null
-            ? ingredientsByCategory[selectedCategory]!
-            : [];
       });
     } catch (e) {
       debugPrint('Errore fetchIngredients → $e');
     }
   }
 
-  void selectCategory(String category) {
-    setState(() {
-      selectedCategory = category;
-      visibleIngredients = ingredientsByCategory[category] ?? [];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final cocktailProvider = context.watch<CocktailProvider>();
     final cocktails = cocktailProvider.cocktails;
+
+    final allIngredients =
+    ingredientsByCategory.values.expand((e) => e).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -85,63 +95,107 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
           style: const TextStyle(fontFamily: 'Gabarito', fontSize: 32),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          setState(() {
+            isSearching = false;
+            filteredIngredients.clear();
+          });
+        },
+        child: cocktailProvider.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Stack(
           children: [
-            const Text(
-              "Quale ingrediente domina il tuo frigo?",
-              style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
-            ),
-            const SizedBox(height: 16),
+            ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              children: [
+                const SizedBox(height: 16),
+                const Text(
+                  "Quale ingrediente domina il tuo frigo?",
+                  style:
+                  TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+                ),
+                const SizedBox(height: 16),
 
-            ...categories.map((category) {
-              final ingredients = ingredientsByCategory[category] ?? [];
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    category,
-                    style: const TextStyle(
-                      fontFamily: 'Gabarito',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                CustomSearchBar(
+                  controller: searchController,
+                  hintText: 'Cerca un ingrediente',
+                  icon: SvgPicture.asset(
+                    'assets/img/icone/search.svg',
+                    color: AppColors.fieldText,
                   ),
-                  SizedBox(
-                    height: 160,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: ingredients.length,
-                      itemBuilder: (context, index) {
-                        final ingredient = ingredients[index];
+                  onChanged: (value) =>
+                      onSearchChanged(value, allIngredients),
+                ),
 
-                        return CategoryCard(
-                          image: Image.asset(
-                            IngredientImages.getImage(ingredient.name),
-                          ),
-                          color: IngredientColors.getColor(ingredient.name),
-                          text: ingredient.name,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => IngredientScreen(
-                                  ingredient: ingredient.name,
-                                  cocktails: cocktails,
-                                ),
+                const SizedBox(height: 24),
+
+                ...categories.map((category) {
+                  final ingredients =
+                      ingredientsByCategory[category] ?? [];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        category,
+                        style: const TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 160,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: ingredients.length,
+                          itemBuilder: (context, index) {
+                            final ingredient = ingredients[index];
+
+                            return CategoryCard(
+                              image: Image.asset(
+                                IngredientImages.getImage(
+                                    ingredient.name),
                               ),
+                              color: IngredientColors.getColor(
+                                  ingredient.name),
+                              text: ingredient.name,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => IngredientScreen(
+                                      ingredient: ingredient.name,
+                                      cocktails: cocktails,
+                                    ),
+                                  ),
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              );
-            }),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                    ],
+                  );
+                }),
+              ],
+            ),
+
+            // 🔼 OVERLAY RISULTATI SEARCH
+            if (isSearching)
+              Positioned(
+                top: 120, // sotto la search bar
+                left: 16,
+                right: 16,
+                child: SearchIngredientResults(
+                  ingredients: filteredIngredients,
+                ),
+              ),
           ],
         ),
       ),

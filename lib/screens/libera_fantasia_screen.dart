@@ -233,15 +233,21 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: InputFieldCustom(
-                hintText: ('Scegli il tuo nome'),
-                onChanged: (value) {
-                  nomeCocktail = value;
-                },
-                hideText: false,
-                icon: null,
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                child: InputFieldCustom(
+                  hintText: ('Scegli il tuo nome'),
+                  onChanged: (value) {
+                    nomeCocktail = value;
+                  },
+                  hideText: false,
+                  icon: null,
+                ),
               ),
             ),
 
@@ -305,20 +311,26 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: TextFieldCustom(
-                maxLines: 5,
-                minLines: 3,
-                hintText: ('Scrivi una breve decrizione...'),
-                onChanged: (value) {
-                  descrizione = value;
-                },
-                icon: SvgPicture.asset(
-                  'assets/img/icone/search.svg',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.iconFocused,
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                child: TextFieldCustom(
+                  maxLines: 5,
+                  minLines: 3,
+                  hintText: ('Scrivi una breve decrizione...'),
+                  onChanged: (value) {
+                    descrizione = value;
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/img/icone/search.svg',
+                    width: 20,
+                    height: 20,
+                    color: AppColors.iconFocused,
+                  ),
                 ),
               ),
             ),
@@ -330,20 +342,26 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: TextFieldCustom(
-                maxLines: 5,
-                minLines: 3,
-                hintText: ('Come ottieni questo cocktail...'),
-                onChanged: (value) {
-                  procedimento = value;
-                },
-                icon: SvgPicture.asset(
-                  'assets/img/icone/search.svg',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.iconFocused,
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                child: TextFieldCustom(
+                  maxLines: 5,
+                  minLines: 3,
+                  hintText: ('Come ottieni questo cocktail...'),
+                  onChanged: (value) {
+                    procedimento = value;
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/img/icone/search.svg',
+                    width: 20,
+                    height: 20,
+                    color: AppColors.iconFocused,
+                  ),
                 ),
               ),
             ),
@@ -367,36 +385,39 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                   );
                 }
 
-                return Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: categories.map((category) {
-                    final isSelected = selectedCategory == category;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: categories.map((category) {
+                      final isSelected = selectedCategory == category;
 
-                    return ChoiceChip(
-                      selectedColor: AppColors.tapBarBackground,
-                      label: Text(
-                        category,
-                        style: isSelected
-                            ? TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Gabarito',
-                                fontSize: 18,
-                              )
-                            : TextStyle(
-                                color: AppColors.tapBarBackground,
-                                fontFamily: 'Gabarito',
-                                fontSize: 18,
-                              ),
-                      ),
-                      selected: isSelected,
-                      onSelected: (_) {
-                        setState(() {
-                          selectedCategory = category;
-                        });
-                      },
-                    );
-                  }).toList(),
+                      return ChoiceChip(
+                        selectedColor: AppColors.tapBarBackground,
+                        label: Text(
+                          category,
+                          style: isSelected
+                              ? TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Gabarito',
+                                  fontSize: 18,
+                                )
+                              : TextStyle(
+                                  color: AppColors.tapBarBackground,
+                                  fontFamily: 'Gabarito',
+                                  fontSize: 18,
+                                ),
+                        ),
+                        selected: isSelected,
+                        onSelected: (_) {
+                          setState(() {
+                            selectedCategory = category;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
                 );
               },
             ),
@@ -408,20 +429,26 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 style: TextStyle(fontFamily: 'Gabarito', fontSize: 25),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: TextFieldCustom(
-                maxLines: 1,
-                minLines: 1,
-                hintText: ('Nome bicchiere...'),
-                onChanged: (value) {
-                  tipoBicchiere = value;
-                },
-                icon: SvgPicture.asset(
-                  'assets/img/icone/search.svg',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.iconFocused,
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                child: TextFieldCustom(
+                  maxLines: 1,
+                  minLines: 1,
+                  hintText: ('Nome bicchiere...'),
+                  onChanged: (value) {
+                    tipoBicchiere = value;
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/img/icone/search.svg',
+                    width: 20,
+                    height: 20,
+                    color: AppColors.iconFocused,
+                  ),
                 ),
               ),
             ),
