@@ -9,6 +9,7 @@ class TextFieldCustom extends StatelessWidget {
   final SvgPicture icon;
   final int minLines;
   final int maxLines;
+  final TextInputType keyboardType;
 
 
   const TextFieldCustom({
@@ -19,6 +20,7 @@ class TextFieldCustom extends StatelessWidget {
     required this.icon,
     required this.minLines,
     required this.maxLines,
+    this.keyboardType = TextInputType.text,
   });
 
   @override
@@ -35,9 +37,18 @@ class TextFieldCustom extends StatelessWidget {
         minLines: minLines,
         maxLines: maxLines,
         cursorColor: AppColors.fieldText,
+        style: TextStyle(
+          color: AppColors.fieldText,
+          fontFamily: 'Gabarito',
+          fontSize: 16,
+        ),
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
+          hintStyle: TextStyle(
+            color: AppColors.fieldText,
+            fontFamily: 'Gabarito',
+          ),
         ),
       ),
     );

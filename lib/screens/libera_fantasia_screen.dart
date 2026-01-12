@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_cocktail/components/custom_button.dart';
 import 'package:flutter_cocktail/components/input_field_custom.dart';
-import 'package:flutter_cocktail/components/reminder_list.dart';
 import 'package:flutter_cocktail/components/text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/cocktail_image_picker.dart';
@@ -12,7 +11,6 @@ import '../providers/cocktail_provider.dart';
 import '../theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/save_provider.dart';
-
 
 class LiberaFantasiaScreen extends StatefulWidget {
   final String title;
@@ -35,8 +33,181 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
   String selectedCategory = 'Altro';
 
   bool _hasMissingFields() {
-    return nomeCocktail.trim().isEmpty ||
-        ingredienti.isEmpty;
+    return nomeCocktail.trim().isEmpty || ingredienti.isEmpty;
+  }
+
+  Future<IngredientEntry?> _openIngredientDialog(BuildContext context) {
+    String name = '';
+    String amount = '';
+    String unit = 'ml';
+
+    final units = ['ml', 'g', 'pcs', 'cl'];
+
+    return showDialog<IngredientEntry>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: AppColors.background,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nuovo ingrediente',
+                    style: TextStyle(
+                      fontFamily: 'Gabarito',
+                      fontSize: 22,
+                      color: Colors.black38,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  TextFieldCustom(
+                    hintText: 'Ingrediente',
+                    icon: SvgPicture.asset(
+                      'assets/img/icone/search.svg',
+                      color: AppColors.iconFocused,
+                    ),
+                    onChanged: (v) => name = v,
+                    minLines: 1,
+                    maxLines: 1,
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  TextFieldCustom(
+                    hintText: 'Quantità (numero)',
+                    icon: SvgPicture.asset(
+                      'assets/img/icone/search.svg',
+                      color: AppColors.iconFocused,
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (v) => amount = v,
+                    minLines: 1,
+                    maxLines: 1,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  Text(
+                    'Unità di misura',
+                    style: TextStyle(
+                      fontFamily: 'Gabarito',
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  Wrap(
+                    spacing: 8,
+                    children: units.map((u) {
+                      final selected = unit == u;
+
+                      return ChoiceChip(
+                        selected: selected,
+                        selectedColor: AppColors.tapBarBackground,
+                        backgroundColor: Colors.white,
+                        label: Text(
+                          u,
+                          style: TextStyle(
+                            fontFamily: 'Gabarito',
+                            color: selected
+                                ? Colors.white
+                                : AppColors.tapBarBackground,
+                          ),
+                        ),
+                        onSelected: (_) {
+                          unit = u;
+                          (context as Element).markNeedsBuild();
+                        },
+                      );
+                    }).toList(),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  CustomButton(
+                    text: 'Salva',
+                    onPressed: () {
+                      if (name.trim().isEmpty ||
+                          amount.trim().isEmpty) {
+                        return;
+                      }
+
+                      Navigator.pop(
+                        context,
+                        IngredientEntry(
+                          name: name,
+                          quantity: amount,
+                          unit: unit,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _buildIngredientRow(IngredientEntry entry) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '${entry.quantity} ${entry.unit} ${entry.name}',
+              style: const TextStyle(fontSize: 18, fontFamily: 'Gabarito'),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            onPressed: () {
+              final removedIndex = ingredienti.indexOf(entry);
+              final removedEntry = entry;
+
+              setState(() {
+                ingredienti.removeAt(removedIndex);
+              });
+
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Ingrediente rimosso',
+                      style: const TextStyle(fontFamily: 'Gabarito'),
+                    ),
+                    action: SnackBarAction(
+                      label: 'Annulla',
+                      onPressed: () {
+                        setState(() {
+                          ingredienti.insert(removedIndex, removedEntry);
+                        });
+                      },
+                    ),
+                  ),
+                );
+            },
+          ),
+
+        ],
+      ),
+    );
   }
 
 
@@ -82,13 +253,50 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               ),
             ),
 
-            ReminderList(
-              onChanged: (updatedList) {
-                setState(() {
-                  ingredienti = updatedList;
-                });
-              },
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (ingredienti.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: Text(
+                        'Nessun ingrediente aggiunto',
+                        style: TextStyle(color: Colors.grey),
+
+                      ),
+                    ),
+                  ),
+
+                ...ingredienti.map(_buildIngredientRow),
+
+                const SizedBox(height: 12),
+
+                Center(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.add),
+                    label: const Text('Aggiungi ingrediente', style: TextStyle(fontFamily: 'Gabarito', fontSize: 18)),
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: AppColors.tapBarBackground,
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.transparent),
+
+                    ),
+                    onPressed: () async {
+                      final newIngredient =
+                      await _openIngredientDialog(context);
+
+                      if (newIngredient != null) {
+                        setState(() {
+                          ingredienti.add(newIngredient);
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
+
 
             Padding(
               padding: const EdgeInsets.only(top: 48),
@@ -144,10 +352,7 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               padding: const EdgeInsets.only(top: 32),
               child: Text(
                 'Categoria',
-                style: TextStyle(
-                  fontFamily: 'Gabarito',
-                  fontSize: 22,
-                ),
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
               ),
             ),
 
@@ -171,8 +376,19 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     return ChoiceChip(
                       selectedColor: AppColors.tapBarBackground,
                       label: Text(
-                          category,
-                          style: isSelected ? TextStyle(color: Colors.white, fontFamily: 'Gabarito', fontSize: 18) : TextStyle(color: AppColors.tapBarBackground, fontFamily: 'Gabarito', fontSize: 18)),
+                        category,
+                        style: isSelected
+                            ? TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Gabarito',
+                                fontSize: 18,
+                              )
+                            : TextStyle(
+                                color: AppColors.tapBarBackground,
+                                fontFamily: 'Gabarito',
+                                fontSize: 18,
+                              ),
+                      ),
                       selected: isSelected,
                       onSelected: (_) {
                         setState(() {
@@ -184,7 +400,6 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 );
               },
             ),
-
 
             Padding(
               padding: const EdgeInsets.only(top: 48),
@@ -237,9 +452,7 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                 onPressed: () async {
                   if (_hasMissingFields()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Valori mancanti'),
-                      ),
+                      const SnackBar(content: Text('Valori mancanti')),
                     );
                     return;
                   }
@@ -249,8 +462,9 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                   final model = CreateCocktail(
                     name: nomeCocktail,
                     description: descrizione,
-                    cocktailIngredients:
-                    ingredienti.map((e) => e.toCocktailIngredient()).toList(),
+                    cocktailIngredients: ingredienti
+                        .map((e) => e.toCocktailIngredient())
+                        .toList(),
                     category: selectedCategory,
                     glassType: tipoBicchiere,
                     preparationMethod: procedimento,
@@ -271,12 +485,11 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                       ),
                     );
 
-                    await context
-                        .read<CocktailProvider>()
-                        .fetchCocktails(forceRefresh: true);
+                    await context.read<CocktailProvider>().fetchCocktails(
+                      forceRefresh: true,
+                    );
 
                     Navigator.of(context).pop();
-
                   } catch (e, stackTrace) {
                     debugPrint('Errore creazione cocktail: $e');
                     debugPrintStack(stackTrace: stackTrace);
@@ -290,7 +503,6 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     );
                   }
                 },
-
               ),
             ),
           ],
@@ -299,3 +511,5 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
     );
   }
 }
+
+
