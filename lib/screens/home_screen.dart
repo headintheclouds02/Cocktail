@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart' hide SearchBar;
-import 'package:flutter_cocktail/components/category_card.dart';
-import 'package:flutter_cocktail/components/cocktail_card.dart';
-import 'package:flutter_cocktail/providers/cocktail_provider.dart';
-import 'package:flutter_cocktail/utils/category_colors.dart';
-import 'package:flutter_cocktail/utils/category_images.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
 import '../components/custom_button.dart';
 import '../components/search_bar.dart';
+import '../components/category_card.dart';
+import '../components/cocktail_card.dart';
+
+import '../components/search_result.dart';
 import '../model/cocktail.dart';
+import '../providers/cocktail_provider.dart';
 import '../providers/favorite_provider.dart';
+
 import '../theme/app_colors.dart';
+import '../utils/category_colors.dart';
+import '../utils/category_images.dart';
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
+
 import 'category_screen.dart';
 import 'detail_screen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   final Function(int) onChangePage;
@@ -23,162 +27,93 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.onChangePage});
 
   @override
-  State<HomeScreen> createState() => _State();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _State extends State<HomeScreen> {
-  List<Cocktail> cocktails = [];
-
+class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController searchController = TextEditingController();
-  List<Cocktail> filteredCocktails = [];
+
   bool isSearching = false;
+  List<Cocktail> filteredCocktails = [];
 
   @override
   void initState() {
     super.initState();
-    fetchCocktails();
+    Future.microtask(() {
+      context.read<CocktailProvider>().fetchCocktails();
+    });
   }
 
-  void onSearchChanged(String value) {
+  void onSearchChanged(String value, List<Cocktail> cocktails) {
     setState(() {
       isSearching = value.trim().isNotEmpty;
 
       filteredCocktails = cocktails
           .where(
-            (c) => c.name.toLowerCase().contains(
-          value.toLowerCase(),
-        ),
+            (c) => c.name.toLowerCase().contains(value.toLowerCase()),
       )
           .toList();
     });
   }
 
-
-  void fetchCocktails() async {
-    final apiProvider = Provider.of<CocktailProvider>(context, listen: false);
-
-    try {
-      final fetchedCocktails = await apiProvider.fetchCocktails();
-      setState(() {
-        cocktails = fetchedCocktails;
-        filteredCocktails = fetchedCocktails;
-      });
-    } catch (e) {
-      if (e.toString().contains('Session expired')) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Session expired, login.')),
-        );
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final favoriteProvider = context.watch<FavoriteProvider>();
+    final cocktailProvider = context.watch<CocktailProvider>();
+
+    final cocktails = cocktailProvider.cocktails;
+    final categories = cocktailProvider.categories;
+
     final baseUrl = 'http://10.0.2.2:8081';
-
-
-    final uniqueCategories = cocktails.map((c) => c.category).toSet().toList();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-
-      child: ListView(
+      child: cocktailProvider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
         children: [
-
           CustomSearchBar(
             controller: searchController,
             hintText: 'Cerca un cocktail',
             icon: SvgPicture.asset(
               'assets/img/icone/search.svg',
-              color:
-                AppColors.fieldText,
+              color: AppColors.fieldText,
             ),
-            onChanged: onSearchChanged,
+            onChanged: (value) =>
+                onSearchChanged(value, cocktails),
           ),
 
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           if (isSearching)
-            Container(
-              constraints: const BoxConstraints(maxHeight: 250),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 10,
-                    color: Colors.black12,
-                  ),
-                ],
-              ),
-
-
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: filteredCocktails.length,
-                separatorBuilder: (_, __) => Divider(height: 1),
-                itemBuilder: (context, index) {
-                  final cocktail = filteredCocktails[index];
-
-                  return ListTile(
-                    title: Text(cocktail.name),
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => DetailScreen(
-                            name: filteredCocktails[index].name,
-                            description: filteredCocktails[index].description,
-                            ingredients: filteredCocktails[index].cocktailIngredients,
-                            preparationMethod: filteredCocktails[index].preparationMethod,
-                            glassType: filteredCocktails[index].glassType,
-                            image: Image.asset(
-                              CocktailImages.getImage(filteredCocktails[index].name),
-                            ),
-                            cocktailId: filteredCocktails[index].id,
-                            isFavorite: favoriteProvider.isFavorite(filteredCocktails[index].id),
-                          ),
-                        ),
-                      );
-
-                      searchController.clear();
-                      setState(() => isSearching = false);
-                    },
-                  );
-                },
-              ),
+            SearchResults(
+              cocktails: filteredCocktails,
+              favoriteProvider: favoriteProvider,
             ),
 
           if (isSearching && filteredCocktails.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(16),
+            const Padding(
+              padding: EdgeInsets.all(16),
               child: Text(
                 'Nessun cocktail trovato',
                 style: TextStyle(color: Colors.grey),
               ),
             ),
 
-
-
-          //TEXT "CATEGORIES"
-          Text(
-            "Categorie",
+          const SizedBox(height: 16),
+          const Text(
+            'Categorie',
             style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
           ),
 
-          //CAROSELLO CARD COCKTAIL (FIX DUPLICATI)
           SizedBox(
             height: 160,
             child: ListView.builder(
-              itemCount: uniqueCategories.length,
               scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
               itemBuilder: (context, index) {
-                final category = uniqueCategories[index];
+                final category = categories[index];
+
                 return CategoryCard(
                   image: Image.asset(
                     CategoryImages.getImage(category),
@@ -189,7 +124,7 @@ class _State extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CategoryScreen(
+                        builder: (_) => CategoryScreen(
                           category: category,
                           cocktails: cocktails,
                         ),
@@ -201,48 +136,52 @@ class _State extends State<HomeScreen> {
             ),
           ),
 
-          //BUTTON CUSTOM
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             child: CustomButton(
               text: 'Crea il tuo cocktail',
               onPressed: () => widget.onChangePage(2),
             ),
           ),
 
-          //TEXT "POPULAR"
-          Text(
-            "Popolari",
+          const Text(
+            'Popolari',
             style: TextStyle(fontFamily: 'Gabarito', fontSize: 22),
           ),
 
           SizedBox(
             height: 250,
             child: ListView.builder(
-              itemCount: cocktails.length,
               scrollDirection: Axis.horizontal,
+              itemCount: cocktails.length,
               itemBuilder: (context, index) {
-                return CocktailCard(
+                final cocktail = cocktails[index];
 
-                  imageUrl: (cocktails[index].imageUrl != null && cocktails[index].imageUrl!.isNotEmpty)
-                      ? baseUrl + cocktails[index].imageUrl!
+                return CocktailCard(
+                  imageUrl:
+                  cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
+                      ? baseUrl + cocktail.imageUrl!
                       : null,
-                  image: (cocktails[index].imageUrl == null || cocktails[index].imageUrl!.isEmpty)
-                      ? Image.asset(CocktailImages.getImage(cocktails[index].name))
+                  image:
+                  cocktail.imageUrl == null || cocktail.imageUrl!.isEmpty
+                      ? Image.asset(
+                    CocktailImages.getImage(cocktail.name),
+                  )
                       : null,
-                  color: CocktailColors.getColor(cocktails[index].name),
-                  text: cocktails[index].name,
-                  description: cocktails[index].description,
-                  ingredients: cocktails[index].cocktailIngredients,
-                  preparationMethod: cocktails[index].preparationMethod,
-                  glassType: cocktails[index].glassType,
-                  isFavorite: favoriteProvider.isFavorite(cocktails[index].id),
-                  cocktailId: cocktails[index].id,
+                  color: CocktailColors.getColor(cocktail.name),
+                  text: cocktail.name,
+                  description: cocktail.description,
+                  ingredients: cocktail.cocktailIngredients,
+                  preparationMethod: cocktail.preparationMethod,
+                  glassType: cocktail.glassType,
+                  isFavorite:
+                  favoriteProvider.isFavorite(cocktail.id),
+                  cocktailId: cocktail.id,
                 );
               },
             ),
           ),
-
         ],
       ),
     );

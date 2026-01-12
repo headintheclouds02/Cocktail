@@ -12,14 +12,37 @@ class CocktailProvider extends ChangeNotifier {
     required this.storage,
   });
 
-  Future<List<Cocktail>> fetchCocktails() async {
+  List<Cocktail> _cocktails = [];
+  bool isLoading = false;
+  bool _loaded = false;
+
+  List<Cocktail> get cocktails => _cocktails;
+
+  Future<void> fetchCocktails({bool forceRefresh = false}) async {
+    if (_loaded && !forceRefresh) return;
+
+    isLoading = true;
+    notifyListeners();
+
     final valid = await storage.isAccessTokenValid();
     if (!valid) {
+      isLoading = false;
+      notifyListeners();
       throw Exception('Session expired');
     }
 
-    final response = await apiClient.dio.get('/api/user/cocktails');
-    final List<dynamic> data = response.data['content'];
-    return data.map((json) => Cocktail.fromJson(json)).toList();
+    final response = await apiClient.dio.get('/api/public/cocktails');
+
+    _cocktails = (response.data['content'] as List)
+        .map((e) => Cocktail.fromJson(e))
+        .toList();
+
+    _loaded = true;
+    isLoading = false;
+    notifyListeners();
   }
+
+  List<String> get categories =>
+      _cocktails.map((c) => c.category).toSet().toList()..sort();
 }
+

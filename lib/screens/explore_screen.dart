@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cocktail/providers/cocktail_provider.dart';
 import 'package:provider/provider.dart';
+
 import '../components/cocktail_card.dart';
-import '../model/cocktail.dart';
+import '../providers/cocktail_provider.dart';
 import '../providers/favorite_provider.dart';
+
 import '../utils/cocktail_colors.dart';
 import '../utils/cocktail_images.dart';
 
@@ -15,62 +16,55 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  List<Cocktail> cocktails = [];
-
   @override
   void initState() {
     super.initState();
-    fetchCocktails();
-  }
 
-  void fetchCocktails() async {
-    final apiProvider = Provider.of<CocktailProvider>(context, listen: false);
-
-    try {
-      final fetchedCocktails = await apiProvider.fetchCocktails();
-      setState(() {
-        cocktails = fetchedCocktails;
-      });
-    } catch (e) {
-      if (e.toString().contains('Session expired')) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Session expired, login.')),
-        );
-        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-      }
-    }
+    Future.microtask(() {
+      context.read<CocktailProvider>().fetchCocktails();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final cocktailProvider = context.watch<CocktailProvider>();
+    final favoriteProvider = context.watch<FavoriteProvider>();
+
+    final cocktails = cocktailProvider.cocktails;
     final baseUrl = 'http://10.0.2.2:8081';
 
+    if (cocktailProvider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return GridView.count(
       crossAxisCount: 2,
       childAspectRatio: 3 / 4,
-      // Numero di colonne
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       children: List.generate(cocktails.length, (index) {
+        final cocktail = cocktails[index];
+
         return CocktailCard(
-          imageUrl: (cocktails[index].imageUrl != null && cocktails[index].imageUrl!.isNotEmpty)
-              ? baseUrl + cocktails[index].imageUrl!
+          imageUrl:
+          cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
+              ? baseUrl + cocktail.imageUrl!
               : null,
-          image: (cocktails[index].imageUrl == null || cocktails[index].imageUrl!.isEmpty)
-              ? Image.asset(CocktailImages.getImage(cocktails[index].name))
+          image:
+          cocktail.imageUrl == null || cocktail.imageUrl!.isEmpty
+              ? Image.asset(
+            CocktailImages.getImage(cocktail.name),
+          )
               : null,
-          color: CocktailColors.getColor(cocktails[index].name),
-          text: cocktails[index].name,
-          description: cocktails[index].description,
-          ingredients: cocktails[index].cocktailIngredients,
-          preparationMethod: cocktails[index].preparationMethod,
-          glassType: cocktails[index].glassType,
-          isFavorite: favoriteProvider.isFavorite(cocktails[index].id),
-          cocktailId: cocktails[index].id,
+          color: CocktailColors.getColor(cocktail.name),
+          text: cocktail.name,
+          description: cocktail.description,
+          ingredients: cocktail.cocktailIngredients,
+          preparationMethod: cocktail.preparationMethod,
+          glassType: cocktail.glassType,
+          isFavorite: favoriteProvider.isFavorite(cocktail.id),
+          cocktailId: cocktail.id,
         );
       }),
     );
