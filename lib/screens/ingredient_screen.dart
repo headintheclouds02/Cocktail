@@ -23,6 +23,7 @@ class IngredientScreen extends StatelessWidget {
     ).toList();
 
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    const baseUrl = 'http://10.0.2.2:8081';
 
     return Scaffold(
       appBar: AppBar(
@@ -43,10 +44,15 @@ class IngredientScreen extends StatelessWidget {
                 itemCount: filteredCocktails.length,
                 itemBuilder: (context, index) {
                   final cocktail = filteredCocktails[index];
+                  final Image image =
+                  cocktail.imageUrl != null && cocktail.imageUrl!.isNotEmpty
+                      ? Image.network(baseUrl + cocktail.imageUrl!, fit: BoxFit.cover)
+                      : Image.asset(
+                    CocktailImages.getImage(cocktail.name),
+                    fit: BoxFit.cover,
+                  );
                   return CocktailCard(
-                    image: Image.asset(
-                      CocktailImages.getImage(cocktail.name),
-                    ),
+                    image: image,
                     color: CocktailColors.getColor(cocktail.name),
                     text: cocktail.name,
                     description: cocktail.description,
