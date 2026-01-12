@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../model/auth_response.dart';
+import '../model/register_request.dart';
 import 'token_storage.dart';
 
 class AuthService {
@@ -28,12 +29,12 @@ class AuthService {
     }
   }
 
-  Future<void> register(Map<String, dynamic> payload) async {
+  Future<void> register(RegisterRequest request) async {
     final uri = Uri.parse('$baseUrl/api/auth/register');
     final res = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(payload),
+      body: jsonEncode(request),
     );
 
     if (res.statusCode != 201 && res.statusCode != 200) {

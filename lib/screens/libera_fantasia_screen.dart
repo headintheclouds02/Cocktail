@@ -34,6 +34,12 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
 
   String selectedCategory = 'Altro';
 
+  bool _hasMissingFields() {
+    return nomeCocktail.trim().isEmpty ||
+        ingredienti.isEmpty;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -229,6 +235,15 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
               child: CustomButton(
                 text: 'Salva Cocktail',
                 onPressed: () async {
+                  if (_hasMissingFields()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Valori mancanti'),
+                      ),
+                    );
+                    return;
+                  }
+
                   final saveProvider = context.read<SaveProvider>();
 
                   final model = CreateCocktail(
@@ -242,14 +257,6 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     alcoholic: true,
                   );
 
-                  if (selectedCategory == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Seleziona una categoria')),
-                    );
-                    return;
-                  }
-
-
                   try {
                     await saveProvider.saveCocktail(
                       model,
@@ -257,21 +264,33 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     );
 
                     if (!mounted) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cocktail salvato con successo')),
+                      const SnackBar(
+                        content: Text('Cocktail salvato con successo'),
+                      ),
                     );
+
                     await context
                         .read<CocktailProvider>()
                         .fetchCocktails(forceRefresh: true);
 
                     Navigator.of(context).pop();
-                  } catch (e) {
+
+                  } catch (e, stackTrace) {
+                    debugPrint('Errore creazione cocktail: $e');
+                    debugPrintStack(stackTrace: stackTrace);
+
                     if (!mounted) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Errore salvataggio: $e')),
+                      const SnackBar(
+                        content: Text('Impossibile creare il cocktail'),
+                      ),
                     );
                   }
                 },
+
               ),
             ),
           ],

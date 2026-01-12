@@ -21,6 +21,8 @@ dependencies:
   flutter_secure_storage: ^10.0.0
   provider: ^6.1.5+1
   cupertino_icons: ^1.0.8
+  jwt_decode: ^0.3.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +90,12 @@ flutter:
     - assets/img/generic/registrazione.png
     - assets/img/generic/splash.png
     - assets/img/generic/altro.png
+    - assets/img/avatar/1.png
+    - assets/img/avatar/2.png
+    - assets/img/avatar/3.png
+    - assets/img/avatar/4.png
+    - assets/img/avatar/5.png
+
 
 
 

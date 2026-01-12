@@ -1,11 +1,26 @@
+import 'package:jwt_decode/jwt_decode.dart';
+
 class AuthResponse {
   final String accessToken;
   final String refreshToken;
 
-  AuthResponse({required this.accessToken, required this.refreshToken});
+  // dati utente estratti dal JWT
+  final String? username;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+
+  AuthResponse({
+    required this.accessToken,
+    required this.refreshToken,
+    this.username,
+    this.firstName,
+    this.lastName,
+    this.email,
+  });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    //serve a cercare parole diverse da access_token
+    // 🔹 estrazione token
     String extractAccess(Map<String, dynamic> m) {
       return (m['accessToken'] ??
           m['access_token'] ??
@@ -17,7 +32,6 @@ class AuthResponse {
     }
 
     String extractRefresh(Map<String, dynamic> m) {
-      //serve a cercare parole diverse da refresh_token
       return (m['refreshToken'] ??
           m['refresh_token'] ??
           m['refresh'] ??
@@ -26,9 +40,20 @@ class AuthResponse {
           .toString();
     }
 
+    final accessToken = extractAccess(json);
+    final refreshToken = extractRefresh(json);
+
+    // 🔹 decode JWT solo se esiste
+    final Map<String, dynamic> payload =
+    accessToken.isNotEmpty ? Jwt.parseJwt(accessToken) : {};
+
     return AuthResponse(
-      accessToken: extractAccess(json),
-      refreshToken: extractRefresh(json),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      username: payload['preferred_username'] as String?,
+      firstName: payload['given_name'] as String?,
+      lastName: payload['family_name'] as String?,
+      email: payload['email'] as String?,
     );
   }
 }

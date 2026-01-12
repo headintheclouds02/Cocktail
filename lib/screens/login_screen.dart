@@ -80,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         hideText: false,
                       ),
 
-
                       //cognome
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -124,10 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             return;
                           }
 
-                          final authProvider = context.read<AuthApiProvider>();  // <- qui
+                          final authProvider = context.read<AuthApiProvider>();
 
                           try {
-                            await authProvider.login(_username, _password);       // <- e qui
+                            await authProvider.login(_username, _password);
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(builder: (context) => MainPage()),
@@ -137,11 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             final msg = e.toString();
                             if (msg.contains('401')) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Credenziali non valide (401)')),
+                                SnackBar(content: Text('Credenziali non valide, riprova')),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Login failed: $msg')),
+                                SnackBar(content: Text('Login fallito')),
                               );
                             }
                           }

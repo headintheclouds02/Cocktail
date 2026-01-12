@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class TokenStorage {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -36,4 +38,17 @@ class TokenStorage {
     final nowSec = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     return exp > (nowSec + marginSeconds);
   }
+
+  static const _avatarKey = 'user_avatar';
+
+  Future<void> saveAvatar(String avatar) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_avatarKey, avatar);
+  }
+
+  Future<String?> getAvatar() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_avatarKey);
+  }
+
 }

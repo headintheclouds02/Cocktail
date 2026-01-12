@@ -4,11 +4,11 @@ import 'package:flutter_cocktail/screens/login_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import '../components/custom_button.dart';
 import '../components/input_field_custom.dart';
+import '../model/register_request.dart';
 import '../theme/app_colors.dart';
 import 'main_page.dart';
 import '../service/auth_service.dart';
 import '../service/token_storage.dart';
-import 'package:flutter/widgets.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -197,22 +197,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     CustomButton(
                       text: "Iniziamo!",
                       onPressed: () async {
-                        final payload = {
-                          'username': username,
-                          'email': email,
-                          'password': password,
-                          'confirmPassword': confirmPassword,
-                          'firstName': firstName,
-                          'lastName': lastName,
-                        };
+                        final request = RegisterRequest(
+                          username: username,
+                          email: email,
+                          password: password,
+                          confirmPassword: confirmPassword,
+                          firstName: firstName,
+                          lastName: lastName,
+                        );
 
                         try {
-                          await _authService.register(payload);
-                          // opzionale: auto-login dopo registrazione
-                          final auth = await _authService.login(
-                            payload['username']!,
-                            payload['password']!,
+                          await _authService.register(request);
+
+                          await _authService.login(
+                            request.username,
+                            request.password,
                           );
+
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => MainPage()),
@@ -222,7 +223,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Registrazione fallita: ${e.toString()}',
+                                'Registrazione fallita',
                               ),
                             ),
                           );
