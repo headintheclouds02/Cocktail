@@ -70,6 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         FocusScope.of(context).unfocus();
+        setState(() {
+          isSearching = false;
+          filteredCocktails.clear();
+        });
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
