@@ -15,7 +15,7 @@ import '../providers/save_provider.dart';
 class LiberaFantasiaScreen extends StatefulWidget {
   final String title;
 
-  const LiberaFantasiaScreen({super.key, required this.title});
+  const LiberaFantasiaScreen({super.key, this.title = 'Libera la Fantasia'});
 
   @override
   State<LiberaFantasiaScreen> createState() => _LiberaFantasiaScreenState();

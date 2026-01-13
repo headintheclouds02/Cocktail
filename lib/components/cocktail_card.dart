@@ -30,34 +30,41 @@ class CocktailCard extends StatelessWidget {
     required this.cocktailId,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    final favoriteProvider = Provider.of<FavoriteProvider>(context);
-    final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
-    Widget imageWidget;
+  static const String _placeholderPath =
+      'assets/img/generic/place-cocktail.png';
 
-    debugPrint('🖼️ CocktailCard → imageUrl = $imageUrl');
-
-
+  /// Decide UNA VOLTA quale immagine usare
+  Image _resolveImage() {
     if (image != null) {
-      imageWidget = image!;
-    } else if (imageUrl != null) {
-      imageWidget = Image.network(
+      return image!;
+    }
+
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      return Image.network(
         imageUrl!,
         width: 180,
         height: 220,
         fit: BoxFit.cover,
         alignment: Alignment.bottomLeft,
       );
-    } else {
-      imageWidget = Image.asset(
-        'assets/img/cocktail/default.jpg',
-        width: 180,
-        height: 220,
-        fit: BoxFit.cover,
-        alignment: Alignment.bottomLeft,
-      );
     }
+
+    return Image.asset(
+      _placeholderPath,
+      width: 180,
+      height: 220,
+      fit: BoxFit.cover,
+      alignment: Alignment.bottomLeft,
+      key: const ValueKey('cocktail-placeholder'),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
+
+    final Image imageWidget = _resolveImage();
 
     return InkWell(
       onTap: () {
@@ -69,7 +76,7 @@ class CocktailCard extends StatelessWidget {
               name: text,
               description: description,
               ingredients: ingredients,
-              image: imageWidget is Image ? imageWidget : Image.asset('assets/img/placeholder.png'),
+              image: imageWidget, // 👈 PASSI SEMPRE LA STESSA
               preparationMethod: preparationMethod,
               glassType: glassType,
               isFavorite: currentIsFavorite,
@@ -99,16 +106,25 @@ class CocktailCard extends StatelessWidget {
                       right: -5,
                       child: IconButton(
                         icon: Icon(
-                          currentIsFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: currentIsFavorite ? Colors.red : Colors.black,
+                          currentIsFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: currentIsFavorite
+                              ? Colors.red
+                              : Colors.black,
                           size: 20,
                         ),
                         onPressed: () async {
                           try {
-                            await favoriteProvider.toggleFavorite(cocktailId);
-                          } catch (e) {
+                            await favoriteProvider
+                                .toggleFavorite(cocktailId);
+                          } catch (_) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Errore durante l\'aggiornamento dei preferiti')),
+                              const SnackBar(
+                                content: Text(
+                                  'Errore durante l\'aggiornamento dei preferiti',
+                                ),
+                              ),
                             );
                           }
                         },
@@ -122,7 +138,10 @@ class CocktailCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 text,
-                style: const TextStyle(fontFamily: 'Gabarito', fontSize: 13),
+                style: const TextStyle(
+                  fontFamily: 'Gabarito',
+                  fontSize: 13,
+                ),
               ),
             ),
           ],

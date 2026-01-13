@@ -164,25 +164,33 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
                                 itemCount: ingredients.length,
                                 itemBuilder: (context, index) {
                                   final ingredient = ingredients[index];
-                                  final isSelected = selectedIngredients.contains(ingredient.name);
+                                  final isSelected = selectedIngredients
+                                      .contains(ingredient.name);
 
                                   return CategoryCard(
-                                      image: Image.asset(
-                                        IngredientImages.getImage(
-                                          ingredient.name,
-                                        ),
+                                    image: Image.asset(
+                                      IngredientImages.getImage(
+                                        ingredient.name,
                                       ),
+                                    ),
                                     color: isSelected
-                                        ? AppColors.tapBarBackground.withOpacity(0.7)
-                                        : IngredientColors.getColor(ingredient.name),
+                                        ? AppColors.tapBarBackground
+                                              .withOpacity(0.7)
+                                        : IngredientColors.getColor(
+                                            ingredient.name,
+                                          ),
                                     text: ingredient.name,
                                     onTap: () {
                                       if (isMultiSelectMode) {
                                         setState(() {
                                           if (isSelected) {
-                                            selectedIngredients.remove(ingredient.name);
+                                            selectedIngredients.remove(
+                                              ingredient.name,
+                                            );
                                           } else {
-                                            selectedIngredients.add(ingredient.name);
+                                            selectedIngredients.add(
+                                              ingredient.name,
+                                            );
                                           }
                                         });
                                       } else {
@@ -222,26 +230,25 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
       ),
       bottomNavigationBar: isMultiSelectMode
           ? SafeArea(
-            child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: CustomButton(
-            text: 'Cerca cocktail (${selectedIngredients.length})',
-            enabled: selectedIngredients.isNotEmpty,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MultiIngredientResultScreen(
-                    selectedIngredients: selectedIngredients.toList(),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: CustomButton(
+                  text: 'Cerca cocktail (${selectedIngredients.length})',
+                  enabled: selectedIngredients.isNotEmpty,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MultiIngredientResultScreen(
+                          selectedIngredients: selectedIngredients.toList(),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-                    ),
-                  ),
-          )
+              ),
+            )
           : null,
-
     );
   }
 }
