@@ -40,6 +40,9 @@ class SaveProvider extends ChangeNotifier {
         imageUrl: imageUrl,
       );
 
+      debugPrint(cocktailWithImage.toJson().toString());
+
+
 
       await cocktailWithImage.create(api.dio);
     } catch (e, st) {

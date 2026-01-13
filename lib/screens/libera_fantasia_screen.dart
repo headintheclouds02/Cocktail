@@ -11,6 +11,7 @@ import '../providers/cocktail_provider.dart';
 import '../theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../providers/save_provider.dart';
+import '../utils/ingredient_categories_api.dart';
 
 class LiberaFantasiaScreen extends StatefulWidget {
   final String title;
@@ -36,12 +37,17 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
     return nomeCocktail.trim().isEmpty || ingredienti.isEmpty;
   }
 
-  Future<IngredientEntry?> _openIngredientDialog(BuildContext context) {
+  Future<IngredientEntry?> _openIngredientDialog(BuildContext context, List<String> categories) {
     String name = '';
     String amount = '';
     String unit = 'ml';
 
     final units = ['ml', 'g', 'pcs', 'cl'];
+
+    String selectedCategory = categories.isNotEmpty
+        ? categories.first
+        : 'Altro';
+
 
     return showDialog<IngredientEntry>(
       context: context,
@@ -133,6 +139,47 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                     }).toList(),
                   ),
 
+                  const SizedBox(height: 24),
+
+                  Text(
+                    'Categoria ingrediente',
+                    style: TextStyle(
+                      fontFamily: 'Gabarito',
+                      fontSize: 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: categories.map((category) {
+                      final isSelected = selectedCategory == category;
+
+                      return ChoiceChip(
+                        selected: isSelected,
+                        selectedColor: AppColors.tapBarBackground,
+                        backgroundColor: Colors.white,
+                        label: Text(
+                          category,
+                          style: TextStyle(
+                            fontFamily: 'Gabarito',
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.tapBarBackground,
+                          ),
+                        ),
+                        onSelected: (_) {
+                          selectedCategory = category;
+                          (context as Element).markNeedsBuild();
+                        },
+                      );
+                    }).toList(),
+                  ),
+
+
                   const SizedBox(height: 32),
 
                   CustomButton(
@@ -142,13 +189,13 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
                           amount.trim().isEmpty) {
                         return;
                       }
-
                       Navigator.pop(
                         context,
                         IngredientEntry(
                           name: name,
                           quantity: amount,
                           unit: unit,
+                          category: selectedCategory,
                         ),
                       );
                     },
@@ -289,8 +336,8 @@ class _LiberaFantasiaScreenState extends State<LiberaFantasiaScreen> {
 
                     ),
                     onPressed: () async {
-                      final newIngredient =
-                      await _openIngredientDialog(context);
+                      final categories =  await IngredientCategoriesApi.fetch();
+                      final newIngredient = await _openIngredientDialog(context, categories);
 
                       if (newIngredient != null) {
                         setState(() {

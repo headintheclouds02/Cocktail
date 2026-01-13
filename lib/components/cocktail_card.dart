@@ -33,7 +33,6 @@ class CocktailCard extends StatelessWidget {
   static const String _placeholderPath =
       'assets/img/generic/place-cocktail.png';
 
-  /// Decide UNA VOLTA quale immagine usare
   Image _resolveImage() {
     if (image != null) {
       return image!;
@@ -76,7 +75,7 @@ class CocktailCard extends StatelessWidget {
               name: text,
               description: description,
               ingredients: ingredients,
-              image: imageWidget, // 👈 PASSI SEMPRE LA STESSA
+              image: imageWidget,
               preparationMethod: preparationMethod,
               glassType: glassType,
               isFavorite: currentIsFavorite,

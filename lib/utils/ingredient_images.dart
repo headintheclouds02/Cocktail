@@ -53,6 +53,6 @@ class IngredientImages {
 
   static String getImage(String ingredientName) {
     return _images[ingredientName] ??
-        'assets/img/cocktail/default.jpg';
+        'assets/img/generic/placeholder.png';
   }
 }

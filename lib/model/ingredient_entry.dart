@@ -9,6 +9,7 @@ class IngredientEntry {
   String description;
 
 
+
   IngredientEntry({
     this.quantity = '',
     this.unit = 'ml',
@@ -24,7 +25,7 @@ extension IngredientEntryMapper on IngredientEntry {
       id: 0,
       name: name.trim(),
       category: category,
-      unit: "",
+      unit: unit,
       description: description.isEmpty ? null : description,
     );
 
