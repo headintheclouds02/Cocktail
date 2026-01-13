@@ -115,7 +115,11 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
           });
         },
         child: cocktailProvider.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.tapBarBackground,
+                ),
+              )
             : Stack(
                 children: [
                   ListView(
@@ -167,44 +171,95 @@ class _SvuotaFrigoScreenState extends State<SvuotaFrigoScreen> {
                                   final isSelected = selectedIngredients
                                       .contains(ingredient.name);
 
-                                  return CategoryCard(
-                                    image: Image.asset(
-                                      IngredientImages.getImage(
-                                        ingredient.name,
-                                      ),
-                                    ),
-                                    color: isSelected
-                                        ? AppColors.tapBarBackground
-                                              .withOpacity(0.7)
-                                        : IngredientColors.getColor(
-                                            ingredient.name,
-                                          ),
-                                    text: ingredient.name,
-                                    onTap: () {
-                                      if (isMultiSelectMode) {
-                                        setState(() {
-                                          if (isSelected) {
-                                            selectedIngredients.remove(
-                                              ingredient.name,
-                                            );
-                                          } else {
-                                            selectedIngredients.add(
-                                              ingredient.name,
-                                            );
-                                          }
-                                        });
-                                      } else {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => IngredientScreen(
-                                              ingredient: ingredient.name,
-                                              cocktails: cocktails,
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (isMultiSelectMode) {
+                                          setState(() {
+                                            if (isSelected) {
+                                              selectedIngredients.remove(
+                                                ingredient.name,
+                                              );
+                                            } else {
+                                              selectedIngredients.add(
+                                                ingredient.name,
+                                              );
+                                            }
+                                          });
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => IngredientScreen(
+                                                ingredient: ingredient.name,
+                                                cocktails: cocktails,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          AnimatedContainer(
+                                            duration: const Duration(
+                                              milliseconds: 200,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              border: isSelected
+                                                  ? Border.all(
+                                                      color: Colors.white,
+                                                      width: 3,
+                                                    )
+                                                  : null,
+                                            ),
+                                            child: CategoryCard(
+                                              image: Image.asset(
+                                                IngredientImages.getImage(
+                                                  ingredient.name,
+                                                ),
+                                              ),
+                                              text: ingredient.name,
+                                              color: isSelected
+                                                  ? IngredientColors.getColor(
+                                                      ingredient.name,
+                                                    ).withOpacity(0.6)
+                                                  : IngredientColors.getColor(
+                                                      ingredient.name,
+                                                    ),
                                             ),
                                           ),
-                                        );
-                                      }
-                                    },
+
+                                          if (isMultiSelectMode)
+                                            Positioned(
+                                              top: 8,
+                                              right: 8,
+                                              child: AnimatedOpacity(
+                                                opacity: isSelected ? 1 : 0,
+                                                duration: const Duration(
+                                                  milliseconds: 150,
+                                                ),
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(
+                                                    6,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.tapBarBackground,
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.check,
+                                                    size: 18,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
                                   );
                                 },
                               ),

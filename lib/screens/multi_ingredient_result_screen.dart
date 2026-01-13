@@ -4,6 +4,7 @@ import '../components/cocktail_card.dart';
 import '../model/cocktail.dart';
 import '../providers/cocktail_provider.dart';
 import '../providers/favorite_provider.dart';
+import '../theme/app_colors.dart';
 import '../utils/cocktail_images.dart';
 
 class MultiIngredientResultScreen extends StatelessWidget {
@@ -88,9 +89,12 @@ class MultiIngredientResultScreen extends StatelessWidget {
           const SizedBox(height: 12),
 
           if (fullMatchCocktails.isEmpty)
-            const Text(
-              'Nessun cocktail con tutti gli ingredienti.',
-              style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const Text(
+                'Nessun cocktail con tutti gli ingredienti.',
+                style: TextStyle(fontFamily: 'Gabarito', fontSize: 18),
+              ),
             )
           else
             ...fullMatchCocktails.map(
@@ -117,14 +121,37 @@ class MultiIngredientResultScreen extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Con solo $ingredientName puoi realizzare:',
-                  style: const TextStyle(
-                    fontFamily: 'Gabarito',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'Con solo ',
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextSpan(
+                        text: ingredientName,
+                        style: const TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 25,
+                          color: AppColors.tapBarBackground,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: ' puoi realizzare:',
+                        style: TextStyle(
+                          fontFamily: 'Gabarito',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ]
                   ),
                 ),
+
                 const SizedBox(height: 8),
                 ...cocktailsWithSingleIngredient.map(
                   (c) => _buildCocktailCard(context, c, Colors.grey.shade100),

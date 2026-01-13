@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
         child: cocktailProvider.isLoading
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: AppColors.tapBarBackground,))
             : ListView(
           children: [
             CustomSearchBar(
