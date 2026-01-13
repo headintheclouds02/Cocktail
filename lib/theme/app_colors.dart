@@ -6,6 +6,8 @@ class AppColors {
 
   static const background = Color(0xFFFFFFFF);
   static const buttonEnabled = Color(0xFF373737);
+static const buttonDisabled = Color(0xA3595959);
+
   static const fieldText = Color(0xCC373737);
   static const iconFocused = Color(0xFF373737);
   static const iconUnfocused = Color(0xFFFFFFFF);
@@ -30,6 +32,8 @@ class AppColors {
   static const vermouth = Color(0xFF938076);
   static const angelo = Color(0xFFC2D1D9);
   static const altro = Color(0xFFEAC8B2);
+
+
 
 
 

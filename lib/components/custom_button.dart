@@ -5,22 +5,25 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const CustomButton({super.key, required this.text, required this.onPressed});
+  final bool enabled;
+
+  const CustomButton({super.key, required this.text, required this.onPressed, this.enabled = true});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: enabled ? onPressed : null,
         style: TextButton.styleFrom(
-          backgroundColor: AppColors.buttonEnabled,
+          backgroundColor:
+          enabled ? AppColors.buttonEnabled : AppColors.buttonDisabled,
           foregroundColor: AppColors.buttonText,
-          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          textStyle: TextStyle(fontSize: 25),
+          textStyle: const TextStyle(fontSize: 25),
         ),
         child: Text(text, style: TextStyle(fontFamily: 'Gabarito')),
       ),

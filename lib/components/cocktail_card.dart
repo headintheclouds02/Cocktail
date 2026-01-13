@@ -36,6 +36,9 @@ class CocktailCard extends StatelessWidget {
     final currentIsFavorite = favoriteProvider.isFavorite(cocktailId);
     Widget imageWidget;
 
+    debugPrint('🖼️ CocktailCard → imageUrl = $imageUrl');
+
+
     if (image != null) {
       imageWidget = image!;
     } else if (imageUrl != null) {
@@ -48,7 +51,7 @@ class CocktailCard extends StatelessWidget {
       );
     } else {
       imageWidget = Image.asset(
-        'assets/img/placeholder.png',
+        'assets/img/cocktail/default.jpg',
         width: 180,
         height: 220,
         fit: BoxFit.cover,
